@@ -28,6 +28,7 @@
     -->
     <!-- Dashboard Core -->
     <link href="./assets/css/dashboard.css" rel="stylesheet" />
+
     <script src="./assets/js/jquery-3.3.1.min.js"></script>
 
     <!-- 
@@ -222,23 +223,8 @@
                           <th></th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr>
-                          <td><a href="contracts.html" class="text-inherit">SimpleStorage</a></td>
-                          <td>0x820dCed2C11157afCD0D88ABE3c1d7563347bFE5</td>
-                          <td>Deployed</td>
-                          <td class="text-right">
-                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                            <div class="dropdown">
-                              <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Actions</button>
-                            </div>
-                          </td>
-                          <td>
-                            <a class="icon" href="javascript:void(0)">
-                              <i class="fe fe-edit"></i>
-                            </a>
-                          </td>
-                        </tr>
+                      <tbody id="contractsTable">
+                        
                       </tbody>
                     </table>
                   </div>
@@ -267,6 +253,42 @@
             </div>
 
             <script>
+
+              $.get( "/embark/contracts").done(function( data ) {
+                $.each(data, function(i, contract) {
+
+                  let $tr = $('<tr>');
+
+                  if (contract.deploy === false) {
+                    $tr.append(
+                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
+                        $('<td>').text('Interface or set to not deploy'),
+                        $('<td>').text('n/a'),
+                        );
+                  } else if (contract.error) {
+                    $tr.append(
+                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
+                        $('<td>').text((contract.error).split("\n")[0].replace(/Error: /g, '').substring(0, 32)),
+                        $('<td>').text('Error'),
+                        );
+                  } else {
+                    $tr.append(
+                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
+                        $('<td>').text(contract.address || '...'),
+                        $('<td>').text(contract.address !== undefined ? 'Deployed' : 'Pending')
+                        );
+                  }
+
+
+                  $tr.append(
+                    $('<td class="text-right"><a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a><div class="dropdown"><button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">Actions</button></div></td>'),
+                    $('<td><a class="icon" href="javascript:void(0)"><i class="fe fe-edit"></i></a></td>')
+                  );
+                  $tr.appendTo('#contractsTable');
+                });
+              });
+
+              
               var ws = new WebSocket("ws://localhost:8000/embark/logs");
               ws.onopen = function() {
               };
