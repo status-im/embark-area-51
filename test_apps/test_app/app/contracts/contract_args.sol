@@ -3,6 +3,9 @@ contract ContractArgs {
   address public addr_2;
   uint public value;
 
+
+
+
   function() public payable { }
 
   function ContractArgs(address[] _addresses, uint initialValue) public {
