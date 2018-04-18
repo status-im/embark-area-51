@@ -5,8 +5,8 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint lib/",
     "test": "mocha test/ --no-timeouts",
-    "testdapp_1": "cd test_apps/test_app/ && npm install && ../../bin/embark test",
-    "testdapp_2": "cd test_apps/contracts_app/ && npm install && ../../bin/embark test",
+    "testdapp_1": "cd test_apps/test_app/ && npm install && node ../../bin/embark test",
+    "testdapp_2": "cd test_apps/contracts_app/ && npm install && node ../../bin/embark test",
     "fulltest": "npm run lint && npm run test && npm run testdapp_1 && npm run testdapp_2"
   },
   "bin": {
@@ -61,7 +61,8 @@
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4",
     "url-loader": "^0.6.2",
-    "web3": "1.0.0-beta.27",
+    "viz.js": "^1.8.1",
+    "web3": "1.0.0-beta.34",
     "webpack": "^3.10.0",
     "window-size": "^1.1.0"
   },
