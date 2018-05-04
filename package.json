@@ -21,14 +21,15 @@
     "url": "https://github.com/iurimatias/embark-framework.git"
   },
   "dependencies": {
+    "ascii-table": "0.0.9",
     "async": "^2.0.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-webpack-aliases": "^1.1.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "6.24.1",
     "babel-preset-react": "^6.24.1",
-    "babel-plugin-webpack-aliases": "^1.1.3",
     "blessed": "^0.1.81",
     "chokidar": "^1.6.0",
     "colors": "^1.1.2",
