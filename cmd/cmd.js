@@ -349,8 +349,9 @@ class Cmd {
   scaffold() {
     program
       .command('scaffold [contract] [environment]')
-      .option('--framework', 'UI framework to use. (default: react)')
+      .option('--framework <framework>', 'UI framework to use. (default: react)')
       .action(function(contract, env, options){
+        
         let environment = env || 'development';
 
         if(contract === undefined){
@@ -363,7 +364,7 @@ class Cmd {
         });
         
         options.contract = contract;
-        options.framework = options.framework || 'react';
+        options.framework =  options.framework || 'react';
         options.env = environment;
         embark.scaffold(options);
       });
