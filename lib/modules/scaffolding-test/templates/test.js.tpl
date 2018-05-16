@@ -19,7 +19,7 @@ describe("{{title}}", function() {
       {{#ifview stateMutability}}
       let result = await {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}).call()
       {{else}}
-      let receipt = {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}).send({
+      let receipt = await {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}).send({
                       {{#if payable}}
                       value: 0,
                       {{/if}}
