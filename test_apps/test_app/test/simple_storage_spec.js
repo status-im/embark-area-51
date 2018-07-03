@@ -3,11 +3,6 @@ const SimpleStorage = require('Embark/contracts/SimpleStorage');
 let accounts;
 
 config({
-  deployment: {
-    type: 'ws',
-    host: 'localhost',
-    port: '8546'
-  },
   contracts: {
     "SimpleStorage": {
       args: [100],
@@ -50,10 +45,7 @@ contract("SimpleStorage", function () {
       done(error);
     });
 
-    console.log('TEST');
-    SimpleStorage.methods.set2(150, 100).send(() => {
-      console.log('Done');
-    });
+    SimpleStorage.methods.set2(150, 100).send();
   });
 
 });
