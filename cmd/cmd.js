@@ -336,6 +336,10 @@ class Cmd {
       .action(function(env, options) {
         checkDeps();
         i18n.setOrDetectLocale(options.locale);
+        embark.initConfig(env || 'development', {
+          embarkConfig: 'embark.json',
+          interceptLogs: false
+        });
         embark.graph({
           env: env || 'development',
           logFile: options.logfile,
