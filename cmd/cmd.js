@@ -108,10 +108,6 @@ class Cmd {
         _options.logLevel = _options.loglevel; // fix casing
         _options.onlyCompile = _options.contracts;
         _options.client = _options.client || 'geth';
-        embark.initConfig(env || 'development', {
-          embarkConfig: 'embark.json',
-          interceptLogs: false
-        });
         embark.build(_options);
       });
   }
@@ -131,10 +127,6 @@ class Cmd {
       .description(__('run dapp (default: %s)', 'development'))
       .action(function (env, options) {
         i18n.setOrDetectLocale(options.locale);
-        embark.initConfig(env || 'development', {
-          embarkConfig: 'embark.json',
-          interceptLogs: false
-        });
         embark.run({
           env: env || 'development',
           serverPort: options.port,
@@ -246,10 +238,6 @@ class Cmd {
         _options.logFile = _options.logfile; // fix casing
         _options.logLevel = _options.loglevel; // fix casing
         _options.client = _options.client || 'geth';
-        embark.initConfig(env || 'development', {
-          embarkConfig: 'embark.json',
-          interceptLogs: false
-        });
         embark.upload(_options);
       });
   }
@@ -264,10 +252,6 @@ class Cmd {
       .description(__('generates documentation based on the smart contracts configured'))
       .action(function (env, options) {
         i18n.setOrDetectLocale(options.locale);
-        embark.initConfig(env || 'development', {
-          embarkConfig: 'embark.json',
-          interceptLogs: false
-        });
         embark.graph({
           env: env || 'development',
           logFile: options.logfile,
