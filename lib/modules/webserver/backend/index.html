@@ -85,7 +85,7 @@
                 </div>
                 <div class="dropdown">
                   <a href="#" class="nav-link pr-0" data-toggle="dropdown">
-                    <span class="avatar" style="background-image: url(./demo/faces/female/25.jpg)"></span>
+                    <span class="avatar" style="background-image: url(./assets/images/dade.jpg)"></span>
                     <span class="ml-2 d-none d-lg-block">
                       <span class="text-default">Dade Murphy</span>
                     </span>
@@ -224,7 +224,6 @@
                         </tr>
                       </thead>
                       <tbody id="contractsTable">
-                        
                       </tbody>
                     </table>
                   </div>
@@ -261,21 +260,21 @@
 
                   if (contract.deploy === false) {
                     $tr.append(
-                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
+                        $(`<td><a href="contracts/view.html?${contract.className}">${contract.className}</a>`),
                         $('<td>').text('Interface or set to not deploy'),
                         $('<td>').text('n/a'),
                         );
                   } else if (contract.error) {
                     $tr.append(
-                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
+                        $(`<td><a href="contracts/view.html?${contract.className}">${contract.className}</a>`),
                         $('<td>').text((contract.error).split("\n")[0].replace(/Error: /g, '').substring(0, 32)),
                         $('<td>').text('Error'),
                         );
                   } else {
                     $tr.append(
-                        $(`<td><a href="contracts/view.html?${contract.name}">${contract.name}</a>`),
-                        $('<td>').text(contract.address || '...'),
-                        $('<td>').text(contract.address !== undefined ? 'Deployed' : 'Pending')
+                        $(`<td><a href="contracts/view.html?${contract.className}">${contract.className}</a>`),
+                        $('<td>').text(contract.deployedAddress || '...'),
+                        $('<td>').text(contract.deployedAddress !== undefined ? 'Deployed' : 'Pending')
                         );
                   }
 
@@ -288,7 +287,6 @@
                 });
               });
 
-              
               var ws = new WebSocket("ws://localhost:8000/embark/logs");
               ws.onopen = function() {
               };
