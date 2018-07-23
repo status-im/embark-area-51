@@ -2,6 +2,7 @@ let async = require('async');
 let windowSize = require('window-size');
 
 let Monitor = require('./monitor.js');
+let LightMonitor = require('./light_monitor.js');
 let Console = require('./console.js');
 
 class Dashboard {
@@ -40,12 +41,16 @@ class Dashboard {
         callback();
       },
       function startMonitor(callback) {
-        monitor = new Monitor({env: self.env, console: console, events: self.events});
+        let monitor;
+        if(self.light) {
+          monitor = new LightMonitor({env: self.env, console: console, events: self.events});
+        } else {
+          monitor = new Monitor({env: self.env, console: console, events: self.events});
+          self.events.on('contractsState', monitor.setContracts);
+          self.events.on('status', monitor.setStatus.bind(monitor));
+          self.events.on('servicesState', monitor.availableServices.bind(monitor));
+        }
         self.logger.logFunction = monitor.logEntry;
-
-        self.events.on('contractsState', monitor.setContracts);
-        self.events.on('status', monitor.setStatus.bind(monitor));
-        self.events.on('servicesState', monitor.availableServices.bind(monitor));
 
         self.events.setCommandHandler("console:command", monitor.executeCmd.bind(monitor));
 
