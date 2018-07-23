@@ -48,13 +48,6 @@ contract ENSRegistry is ENS {
         emit NewOwner(node, label, owner);
         records[subnode].owner = owner;
     }
-    */
-
-    function setSubnodeOwner(bytes32 node, bytes32 label, address owner) public {
-        var subnode = sha3(node, label);
-        NewOwner(node, label, owner);
-        records[subnode].owner = owner;
-    }
 
     /**
      * @dev Sets the resolver address for the specified node.
