@@ -9,7 +9,6 @@ import './Resolver.sol';
 contract FIFSRegistrar {
     ENS ens;
     bytes32 rootNode;
-    Resolver resolver;
 
     modifier only_owner(bytes32 subnode) {
         bytes32 node = keccak256(abi.encodePacked(rootNode, subnode));
@@ -26,7 +25,6 @@ contract FIFSRegistrar {
     constructor(ENS ensAddr, bytes32 node) public {
         ens = ensAddr;
         rootNode = node;
-        resolver = resolverAddr;
     }
 
     /**
@@ -34,13 +32,7 @@ contract FIFSRegistrar {
      * @param subnode The hash of the label to register.
      * @param owner The address of the new owner.
      */
-    function register(bytes32 subnode, address owner, address nodeAddress) public only_owner(subnode) {
-        bytes32 subdomainHash = sha3(rootNode, subnode);
+    function register(bytes32 subnode, address owner) public only_owner(subnode) {
         ens.setSubnodeOwner(rootNode, subnode, owner);
-        ens.setResolver(subdomainHash, resolver); //default resolver
-        bool resolveAccount = nodeAddress != address(0);
-        if (resolveAccount) {
-            resolver.setAddr(subdomainHash, nodeAddress);
-        }
     }
 }
