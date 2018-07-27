@@ -39,7 +39,11 @@
     "decompress": "^4.2.0",
     "deep-equal": "^1.0.1",
     "ejs": "^2.5.8",
+<<<<<<< HEAD
     "embarkjs": "^0.3.4",
+=======
+    "embarkjs": "^0.3.0",
+>>>>>>> up embarkJS version
     "eth-ens-namehash": "^2.0.8",
     "eth-lib": "^0.2.8",
     "ethereumjs-wallet": "0.6.0",
