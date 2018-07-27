@@ -1,5 +1,5 @@
 const async = require('async');
-const AccountParser = require('../utils/accountParser');
+const AccountParser = require('../../utils/accountParser');
 const fundAccount = require('./fundAccount');
 
 class Provider {
@@ -73,7 +73,7 @@ class Provider {
     if (!self.isDev) {
       return callback();
     }
-    async.each(self.accounts, (account, eachCb) => {
+    async.eachLimit(self.accounts, 1, (account, eachCb) => {
       fundAccount(self.web3, account.address, account.hexBalance, eachCb);
     }, callback);
   }
