@@ -7,7 +7,8 @@
     "test": "mocha test/ --no-timeouts --exit",
     "testdapp_1": "cd test_apps/test_app/ && npm install && node ../../bin/embark test",
     "testdapp_2": "cd test_apps/contracts_app/ && npm install && node ../../bin/embark test",
-    "fulltest": "npm run lint && npm run test && npm run testdapp_1 && npm run testdapp_2"
+    "fulltest": "npm run lint && npm run test && npm run testdapp_1 && npm run testdapp_2",
+    "prepublish": "cd embark-ui && npm install && npm run build && cd -"
   },
   "bin": {
     "embark": "./bin/embark"
