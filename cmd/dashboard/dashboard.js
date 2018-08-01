@@ -31,7 +31,7 @@ class Dashboard {
     let plugin = this.plugins.createPlugin('dashboard', {});
     plugin.registerAPICall(
       'ws',
-      '/embark/dashboard',
+      '/embark-api/dashboard',
       (ws, req) => {
         let dashboardState = { contractsState: [], environment: "", status: "", availableServices: [] };
 
