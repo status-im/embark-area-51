@@ -3,7 +3,7 @@
   "version": "3.2.0-develop",
   "description": "Embark is a framework that allows you to easily develop and deploy DApps",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint lib/",
+    "lint": "./node_modules/.bin/eslint lib/ embark-ui/src",
     "test": "mocha test/ --no-timeouts --exit",
     "testdapp_1": "cd test_apps/test_app/ && npm install && node ../../bin/embark test",
     "testdapp_2": "cd test_apps/contracts_app/ && npm install && node ../../bin/embark test",
