@@ -1,9 +1,15 @@
 import axios from "axios";
 
+const BASE_URL = 'http://localhost:8000/embark-api';
+
 export function fetchAccounts() {
-  return axios.get('http://localhost:8000/embark-api/blockchain/accounts');
+  return axios.get(`${BASE_URL}/blockchain/accounts`);
+}
+
+export function fetchBlocks(from) {
+  return axios.get(`${BASE_URL}/blockchain/blocks`, {params: {from}});
 }
 
 export function fetchProcesses() {
-  return axios.get('http://localhost:8000/embark-api/processes');
+  return axios.get(`${BASE_URL}/processes`);
 }
