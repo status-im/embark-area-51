@@ -10,7 +10,7 @@
     ],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2017,
+        "ecmaVersion": 2018,
         "ecmaFeatures": {
             "jsx": true
         }
@@ -67,7 +67,7 @@
         ],
         "dot-notation": "off",
         "eol-last": "error",
-        "eqeqeq": "off",
+        "eqeqeq": "error",
         "for-direction": "error",
         "func-call-spacing": "error",
         "func-name-matching": "error",
