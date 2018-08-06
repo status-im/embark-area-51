@@ -63,6 +63,8 @@ export const RECEIVE_PROCESSES_ERROR = 'RECEIVE_PROCESSES_ERROR';
 // Process logs
 export const FETCH_PROCESS_LOGS = 'FETCH_PROCESS_LOGS';
 export const RECEIVE_PROCESS_LOGS = 'RECEIVE_PROCESS_LOGS';
+export const WATCH_NEW_PROCESS_LOGS = 'WATCH_NEW_PROCESS_LOGS';
+export const RECEIVE_NEW_PROCESS_LOG = 'RECEIVE_NEW_PROCESS_LOG';
 export const RECEIVE_PROCESS_LOGS_ERROR = 'RECEIVE_PROCESS_LOGS_ERROR';
 // BlockHeader
 export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
@@ -90,6 +92,13 @@ export function receiveProcessesError(error) {
 export function fetchProcessLogs(processName) {
   return {
     type: FETCH_PROCESS_LOGS,
+    processName
+  };
+}
+
+export function listenToProcessLogs(processName) {
+  return {
+    type: WATCH_NEW_PROCESS_LOGS,
     processName
   };
 }
