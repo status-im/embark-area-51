@@ -1,21 +1,35 @@
-import {RECEIVE_TRANSACTIONS, RECEIVE_TRANSACTIONS_ERROR} from "../actions";
+import * as actions from "../actions";
 
 const BN_FACTOR = 10000;
 
+function sortTransaction(a, b) {
+  return ((BN_FACTOR * b.blockNumber) + b.transactionIndex) - ((BN_FACTOR * a.blockNumber) + a.transactionIndex);
+}
+
+function filterTransaction(tx, index, self) {
+  return index === self.findIndex((t) => (
+    t.blockNumber === tx.blockNumber && t.transactionIndex === tx.transactionIndex
+  ));
+}
+
 export default function transactions(state = {}, action) {
   switch (action.type) {
-    case RECEIVE_TRANSACTIONS:
+    case actions.TRANSACTIONS[actions.SUCCESS]:
       return {
-        ...state, data: [...state.data || [], ...action.transactions.data]
-          .filter((tx, index, self) => index === self.findIndex((t) => (
-            t.blockNumber === tx.blockNumber && t.transactionIndex === tx.transactionIndex
-          )))
-          .sort((a, b) => (
-            ((BN_FACTOR * b.blockNumber) + b.transactionIndex) - ((BN_FACTOR * a.blockNumber) + a.transactionIndex))
-          )
+        ...state, error: null, data: [...action.transactions.data, ...state.data || []]
+          .filter(filterTransaction)
+          .sort(sortTransaction)
       };
-    case RECEIVE_TRANSACTIONS_ERROR:
-      return Object.assign({}, state, {error: true});
+    case actions.TRANSACTIONS[actions.FAILURE]:
+      return Object.assign({}, state, {error: action.error});
+    case actions.TRANSACTION[actions.SUCCESS]:
+      return {
+        ...state, error: null, data: [action.transaction.data, ...state.data || []]
+          .filter(filterTransaction)
+          .sort(sortTransaction)
+      };
+    case actions.TRANSACTION[actions.FAILURE]:
+      return Object.assign({}, state, {error: action.error});
     default:
       return state;
   }

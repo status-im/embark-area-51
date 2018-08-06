@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 import {
   Page,
   Grid,
@@ -6,7 +7,6 @@ import {
   Table
 } from "tabler-react";
 import PropTypes from 'prop-types';
-
 
 const Blocks = ({blocks}) => (
   <Page.Content title="Blocks">
@@ -20,7 +20,7 @@ const Blocks = ({blocks}) => (
             bodyItems={
               blocks.map((block) => {
                 return ([
-                  {content: block.number},
+                  {content: <Link to={`/embark/explorer/blocks/${block.number}`}>{block.number}</Link>},
                   {content: new Date(block.timestamp * 1000).toLocaleString()},
                   {content: block.gasUsed},
                   {content: block.transactions.length}

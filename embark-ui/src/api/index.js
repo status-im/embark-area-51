@@ -1,16 +1,38 @@
 import axios from "axios";
 import constants from '../constants';
 
+
+function get(path, params) {
+  return axios.get(constants.httpEndpoint + path, params)
+    .then((response) => {
+      return {response};
+    }).catch((error) => {
+      return {response: null, error: error.message || 'Something bad happened'};
+    });
+}
+
 export function fetchAccounts() {
-  return axios.get(`${constants.httpEndpoint}/blockchain/accounts`);
+  return get('/blockchain/accounts');
 }
 
-export function fetchBlocks(from) {
-  return axios.get(`${constants.httpEndpoint}/blockchain/blocks`, {params: {from}});
+export function fetchAccount(payload) {
+  return get(`/blockchain/accounts/${payload.address}`);
 }
 
-export function fetchTransactions(blockFrom) {
-  return axios.get(`${constants.httpEndpoint}/blockchain/transactions`, {params: {blockFrom}});
+export function fetchBlocks(payload) {
+  return get('/blockchain/blocks', {params: payload});
+}
+
+export function fetchBlock(payload) {
+  return get(`/blockchain/blocks/${payload.blockNumber}`);
+}
+
+export function fetchTransactions(payload) {
+  return get('/blockchain/transactions', {params: payload});
+}
+
+export function fetchTransaction(payload) {
+  return get(`/blockchain/transactions/${payload.hash}`);
 }
 
 export function fetchProcesses() {

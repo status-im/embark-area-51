@@ -1,7 +1,61 @@
 // Accounts
-export const FETCH_ACCOUNTS = 'FETCH_ACCOUNTS';
-export const RECEIVE_ACCOUNTS = 'RECEIVE_ACCOUNTS';
-export const RECEIVE_ACCOUNTS_ERROR = 'RECEIVE_ACCOUNTS_ERROR';
+export const REQUEST = 'REQUEST';
+export const SUCCESS = 'SUCCESS';
+export const FAILURE = 'FAILURE';
+
+function createRequestTypes(base) {
+  return [REQUEST, SUCCESS, FAILURE].reduce((acc, type) => {
+    acc[type] = `${base}_${type}`;
+    return acc;
+  }, {});
+}
+
+function action(type, payload = {}) {
+  return {type, ...payload};
+}
+
+export const ACCOUNTS = createRequestTypes('ACCOUNTS');
+export const accounts = {
+  request: () => action(ACCOUNTS[REQUEST]),
+  success: (accounts) => action(ACCOUNTS[SUCCESS], {accounts}),
+  failure: (error) => action(ACCOUNTS[FAILURE], {error})
+};
+
+export const ACCOUNT = createRequestTypes('ACCOUNT');
+export const account = {
+  request: (address) => action(ACCOUNT[REQUEST], {address}),
+  success: (account) => action(ACCOUNT[SUCCESS], {account}),
+  failure: (error) => action(ACCOUNT[FAILURE], {error})
+};
+
+export const BLOCKS = createRequestTypes('BLOCKS');
+export const blocks = {
+  request: (from) => action(BLOCKS[REQUEST], {from}),
+  success: (blocks) => action(BLOCKS[SUCCESS], {blocks}),
+  failure: (error) => action(BLOCKS[FAILURE], {error})
+};
+
+export const BLOCK = createRequestTypes('BLOCK');
+export const block = {
+  request: (blockNumber) => action(BLOCK[REQUEST], {blockNumber}),
+  success: (block) => action(BLOCK[SUCCESS], {block}),
+  failure: (error) => action(BLOCK[FAILURE], {error})
+};
+
+export const TRANSACTIONS = createRequestTypes('TRANSACTIONS');
+export const transactions = {
+  request: (blockFrom) => action(TRANSACTIONS[REQUEST], {blockFrom}),
+  success: (transactions) => action(TRANSACTIONS[SUCCESS], {transactions}),
+  failure: (error) => action(TRANSACTIONS[FAILURE], {error})
+};
+
+export const TRANSACTION = createRequestTypes('TRANSACTION');
+export const transaction = {
+  request: (hash) => action(TRANSACTION[REQUEST], {hash}),
+  success: (transaction) => action(TRANSACTION[SUCCESS], {transaction}),
+  failure: (error) => action(TRANSACTION[FAILURE], {error})
+};
+
 // Processes
 export const FETCH_PROCESSES = 'FETCH_PROCESSES';
 export const RECEIVE_PROCESSES = 'RECEIVE_PROCESSES';
@@ -10,35 +64,8 @@ export const RECEIVE_PROCESSES_ERROR = 'RECEIVE_PROCESSES_ERROR';
 export const FETCH_PROCESS_LOGS = 'FETCH_PROCESS_LOGS';
 export const RECEIVE_PROCESS_LOGS = 'RECEIVE_PROCESS_LOGS';
 export const RECEIVE_PROCESS_LOGS_ERROR = 'RECEIVE_PROCESS_LOGS_ERROR';
-// Blocks
-export const FETCH_BLOCKS = 'FETCH_BLOCKS';
-export const RECEIVE_BLOCKS = 'RECEIVE_BLOCKS';
-export const RECEIVE_BLOCKS_ERROR = 'RECEIVE_BLOCKS_ERROR';
-// Transactions
-export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
-export const RECEIVE_TRANSACTIONS = 'RECEIVE_TRANSACTIONS';
-export const RECEIVE_TRANSACTIONS_ERROR = 'RECEIVE_TRANSACTIONS_ERROR';
 // BlockHeader
 export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
-
-export function fetchAccounts() {
-  return {
-    type: FETCH_ACCOUNTS
-  };
-}
-
-export function receiveAccounts(accounts) {
-  return {
-    type: RECEIVE_ACCOUNTS,
-    accounts
-  };
-}
-
-export function receiveAccountsError() {
-  return {
-    type: RECEIVE_ACCOUNTS_ERROR
-  };
-}
 
 export function fetchProcesses() {
   return {
@@ -79,46 +106,6 @@ export function receiveProcessLogsError(error) {
   return {
     type: RECEIVE_PROCESS_LOGS_ERROR,
     error
-  };
-}
-
-export function fetchBlocks(from) {
-  return {
-    type: FETCH_BLOCKS,
-    from
-  };
-}
-
-export function receiveBlocks(blocks) {
-  return {
-    type: RECEIVE_BLOCKS,
-    blocks
-  };
-}
-
-export function receiveBlocksError() {
-  return {
-    type: RECEIVE_BLOCKS_ERROR
-  };
-}
-
-export function fetchTransactions(blockFrom) {
-  return {
-    type: FETCH_TRANSACTIONS,
-    blockFrom
-  };
-}
-
-export function receiveTransactions(transactions) {
-  return {
-    type: RECEIVE_TRANSACTIONS,
-    transactions
-  };
-}
-
-export function receiveTransactionsError() {
-  return {
-    type: RECEIVE_TRANSACTIONS_ERROR
   };
 }
 
