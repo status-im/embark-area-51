@@ -64,3 +64,15 @@ export function webSocketProcess(processName) {
 export function webSocketBlockHeader() {
   return new WebSocket(`${constants.wsEndpoint}/blockchain/blockHeader`);
 }
+
+export function fetchContract(contractName) {
+  return axios.get(`${constants.httpEndpoint}/contract/${contractName}`);
+}
+
+export function fetchContracts() {
+  return axios.get(`${constants.httpEndpoint}/contracts`);
+}
+
+export function fetchContractProfile(contractName) {
+  return axios.get(`${constants.httpEndpoint}/profiler/${contractName}`);
+}

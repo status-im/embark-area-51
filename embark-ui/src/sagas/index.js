@@ -106,6 +106,45 @@ export function *watchListenToProcessLogs() {
   yield takeEvery(actions.WATCH_NEW_PROCESS_LOGS, listenToProcessLogs);
 }
 
+export function *fetchContract(action) {
+  try {
+    const contract = yield call(api.fetchContract, action.contractName);
+    yield put(actions.receiveContract(contract));
+  } catch (e) {
+    yield put(actions.receiveContractError());
+  }
+}
+
+export function *watchFetchContract() {
+  yield takeEvery(actions.FETCH_CONTRACT, fetchContract);
+}
+
+export function *fetchContracts() {
+  try {
+    const contracts = yield call(api.fetchContracts);
+    yield put(actions.receiveContracts(contracts));
+  } catch (e) {
+    yield put(actions.receiveContractsError());
+  }
+}
+
+export function *watchFetchContracts() {
+  yield takeEvery(actions.FETCH_CONTRACTS, fetchContracts);
+}
+
+export function *fetchContractProfile(action) {
+  try {
+    const profile = yield call(api.fetchContractProfile, action.contractName);
+    yield put(actions.receiveContractProfile(profile));
+  } catch (e) {
+    yield put(actions.receiveContractError());
+  }
+}
+
+export function *watchFetchContractProfile() {
+  yield takeEvery(actions.FETCH_CONTRACT_PROFILE, fetchContractProfile);
+}
+
 export default function *root() {
   yield all([
     fork(watchInitBlockHeader),
@@ -114,10 +153,16 @@ export default function *root() {
     fork(watchFetchProcesses),
     fork(watchFetchProcessLogs),
     fork(watchListenToProcessLogs),
-    fork(watchFetchBlocks),
     fork(watchFetchBlock),
-    fork(watchFetchTransactions),
+    fork(watchFetchTransactions)
     fork(watchFetchTransaction),
     fork(watchPostCommand)
+    fork(watchFetchBlocks),
+    fork(watchFetchContracts),
+    fork(watchFetchContract),
+    fork(watchFetchTransaction),
+    fork(watchFetchContractProfile),
+    fork(watchFetchTransactions)
   ]);
 }
+
