@@ -57,3 +57,22 @@ export function getContract(state, contractName) {
 export function getContractProfile(state, contractName) {
   return state.entities.contractProfiles.find((contractProfile => contractProfile.name === contractName));
 }
+
+export function getMessageVersion(state) {
+  return state.entities.messageVersion;
+}
+
+export function getMessageChannels(state) {
+  return state.entities.messageChannels;
+}
+
+export function getMessages(state) {
+  const messages = {};
+  state.entities.messages.forEach(message => {
+    if (!messages[message.channel]) {
+      messages[message.channel] = []
+    }
+    messages[message.channel].push(message);
+  });
+  return messages;
+}
