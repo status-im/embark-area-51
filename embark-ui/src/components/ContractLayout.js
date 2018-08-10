@@ -8,6 +8,7 @@ import {
 } from "tabler-react";
 
 import ContractContainer from '../containers/ContractContainer';
+import ContractLoggerContainer from '../containers/ContractLoggerContainer';
 import ContractProfileContainer from '../containers/ContractProfileContainer';
 
 const ContractLayout = (props) => (
@@ -16,6 +17,14 @@ const ContractLayout = (props) => (
       <Page.Title className="my-5">Contract</Page.Title>
       <div>
         <List.Group transparent={true}>
+          <List.GroupItem
+            className="d-flex align-items-center"
+            to={`/embark/contracts/${props.match.params.contractName}/overview`}
+            icon="corner-left-up"
+            RootComponent={withRouter(NavLink)}
+          >
+            Back to {props.match.params.contractName}
+          </List.GroupItem>
           <List.GroupItem
             className="d-flex align-items-center"
             to={`/embark/contracts/${props.match.params.contractName}/deployment`}
@@ -48,11 +57,20 @@ const ContractLayout = (props) => (
           >
             Profile
           </List.GroupItem>
+          <List.GroupItem
+            className="d-flex align-items-center"
+            to={`/embark/contracts/${props.match.params.contractName}/logger`}
+            icon="chevrons-right"
+            RootComponent={withRouter(NavLink)}
+          >
+            Logger
+          </List.GroupItem>
         </List.Group>
       </div>
     </Grid.Col>
     <Grid.Col md={9}>
       <Switch>
+        <Route exact path="/embark/contracts/:contractName/logger" component={ContractLoggerContainer} />
         <Route exact path="/embark/contracts/:contractName/profiler" component={ContractProfileContainer} />
         <ContractContainer />
       </Switch>

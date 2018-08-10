@@ -56,6 +56,10 @@ export function fetchProcessLogs(payload) {
   return get(`/process-logs/${payload.processName}`);
 }
 
+export function fetchContractLogs() {
+  return get(`/contracts/logs`);
+}
+
 export function fetchContracts() {
   return get('/contracts');
 }
@@ -82,6 +86,10 @@ export function fetchContractProfile(payload) {
 
 export function webSocketProcess(processName) {
   return new WebSocket(constants.wsEndpoint + '/process-logs/' + processName);
+}
+
+export function webSocketContractLogs() {
+  return new WebSocket(constants.wsEndpoint + '/contracts/logs');
 }
 
 export function webSocketBlockHeader() {

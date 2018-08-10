@@ -76,6 +76,13 @@ export const processLogs = {
   failure: (error) => action(PROCESS_LOGS[FAILURE], {error})
 };
 
+export const CONTRACT_LOGS = createRequestTypes('CONTRACT_LOGS');
+export const contractLogs = {
+  request: () => action(CONTRACT_LOGS[REQUEST]),
+  success: (contractLogs) => action(CONTRACT_LOGS[SUCCESS], {contractLogs}),
+  failure: (error) => action(CONTRACT_LOGS[FAILURE], {error})
+};
+
 export const CONTRACTS = createRequestTypes('CONTRACTS');
 export const contracts = {
   request: () => action(CONTRACTS[REQUEST]),
@@ -120,12 +127,19 @@ export const messageListen = {
 
 // Web Socket
 export const WATCH_NEW_PROCESS_LOGS = 'WATCH_NEW_PROCESS_LOGS';
+export const WATCH_NEW_CONTRACT_LOGS = 'WATCH_NEW_CONTRACT_LOGS';
 export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
 
 export function listenToProcessLogs(processName) {
   return {
     type: WATCH_NEW_PROCESS_LOGS,
     processName
+  };
+}
+
+export function listenToContractLogs() {
+  return {
+    type: WATCH_NEW_CONTRACT_LOGS
   };
 }
 
