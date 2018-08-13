@@ -148,3 +148,12 @@ export function initBlockHeader(){
     type: INIT_BLOCK_HEADER
   };
 }
+
+export const FIDDLE = createRequestTypes('FIDDLE');
+export const fiddle = {
+  request: (codeToCompile) => action(FIDDLE[REQUEST], {codeToCompile}),
+  success: (fiddle) => action(FIDDLE[SUCCESS], {fiddle}),
+  failure: (error) => action(FIDDLE[FAILURE], {error})
+};
+
+

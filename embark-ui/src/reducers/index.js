@@ -15,7 +15,8 @@ const entitiesDefaultState = {
   commands: [],
   messages: [],
   messageChannels: [],
-  messageVersion: null
+  messageVersion: null,
+  fiddle: null
 };
 
 const sorter = {

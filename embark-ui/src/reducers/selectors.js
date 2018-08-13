@@ -74,9 +74,13 @@ export function getMessages(state) {
   const messages = {};
   state.entities.messages.forEach(message => {
     if (!messages[message.channel]) {
-      messages[message.channel] = []
+      messages[message.channel] = [];
     }
     messages[message.channel].push(message);
   });
   return messages;
+}
+
+export function getFiddle(state){
+  return state.entities.fiddle;
 }
