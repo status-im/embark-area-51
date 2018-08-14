@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
-import {REQUEST} from "../actions";
+import {REQUEST, SUCCESS} from "../actions";
 
 const BN_FACTOR = 10000;
+const voidAddress = '0x0000000000000000000000000000000000000000';
 
 const entitiesDefaultState = {
   accounts: [],
@@ -15,8 +16,10 @@ const entitiesDefaultState = {
   commands: [],
   messages: [],
   messageChannels: [],
-  messageVersion: null,
-  fiddle: null
+  fiddles: [],
+  versions: [],
+  plugins: [],
+  ensRecords: []
 };
 
 const sorter = {
@@ -54,6 +57,11 @@ const filtrer = {
     return index === self.findIndex((t) => (
       t.blockNumber === tx.blockNumber && t.transactionIndex === tx.transactionIndex
     ));
+  },
+  ensRecords: function(record, index, self) {
+    return record.name && record.address && record.address !== voidAddress && index === self.findIndex((r) => (
+      r.address=== record.address && r.name === record.name
+    ));
   }
 };
 
@@ -61,10 +69,7 @@ function entities(state = entitiesDefaultState, action) {
   for (let name of Object.keys(state)) {
     let filter = filtrer[name] || (() => true);
     let sort = sorter[name] || (() => true);
-    if (action[name] && !Array.isArray(action[name])) {
-      return {...state, [name]: action[name]};
-    }
-    if (action[name] && (!Array.isArray(action[name]) || action[name].length > 1)) {
+    if (action[name] && action[name].length > 1) {
       return {...state, [name]: [...action[name], ...state[name]].filter(filter).sort(sort)};
     }
     if (action[name] && action[name].length === 1) {
@@ -90,6 +95,20 @@ function errorMessage(state = null, action) {
   return action.error || state;
 }
 
+/* eslint multiline-ternary: "off" */
+function errorEntities(state = {}, action) {
+  if (!action.type.endsWith(SUCCESS)) {
+    return state;
+  }
+  let newState = {};
+  for (let name of Object.keys(entitiesDefaultState)) {
+    if (action[name] && action[name].length > 0) {
+      newState[name] = action[name][0].error;
+    }
+  }
+  return {...state, ...newState};
+}
+
 function loading(_state = false, action) {
   return action.type.endsWith(REQUEST);
 }
@@ -97,7 +116,8 @@ function loading(_state = false, action) {
 const rootReducer = combineReducers({
   entities,
   loading,
-  errorMessage
+  errorMessage,
+  errorEntities
 });
 
 export default rootReducer;

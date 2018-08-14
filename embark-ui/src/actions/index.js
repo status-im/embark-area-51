@@ -104,11 +104,18 @@ export const contractProfile = {
   failure: (error) => action(CONTRACT_PROFILE[FAILURE], {error})
 };
 
-export const MESSAGE_VERSION = createRequestTypes('MESSAGE_VERSION');
-export const messageVersion = {
-  request: () => action(MESSAGE_VERSION[REQUEST]),
-  success: (messageVersion) => action(MESSAGE_VERSION[SUCCESS], {messageVersion}),
-  failure: (error) => action(MESSAGE_VERSION[FAILURE], {error})
+export const VERSIONS = createRequestTypes('VERSIONS');
+export const versions = {
+  request: () => action(VERSIONS[REQUEST]),
+  success: (versions) => action(VERSIONS[SUCCESS], {versions}),
+  failure: (error) => action(VERSIONS[FAILURE], {error})
+};
+
+export const PLUGINS = createRequestTypes('PLUGINS');
+export const plugins = {
+  request: () => action(PLUGINS[REQUEST]),
+  success: (plugins) => action(PLUGINS[SUCCESS], {plugins}),
+  failure: (error) => action(PLUGINS[FAILURE], {error})
 };
 
 export const MESSAGE_SEND = createRequestTypes('MESSAGE_SEND');
@@ -123,6 +130,28 @@ export const messageListen = {
   request: (messageChannel) => action(MESSAGE_LISTEN[REQUEST], {messageChannels: [messageChannel]}),
   success: (messages) => action(MESSAGE_LISTEN[SUCCESS], {messages}),
   failure: (error) => action(MESSAGE_LISTEN[FAILURE], {error})
+};
+
+export const ENS_RECORD = createRequestTypes('ENS_RECORD');
+export const ensRecord = {
+  resolve: (name) => action(ENS_RECORD[REQUEST], {name}),
+  lookup: (address) => action(ENS_RECORD[REQUEST], {address}),
+  success: (record, payload) => action(ENS_RECORD[SUCCESS], {ensRecords: [Object.assign(payload, record)]}),
+  failure: (error) => action(ENS_RECORD[FAILURE], {error})
+};
+
+export const ENS_RECORDS = createRequestTypes('ENS_RECORDS');
+export const ensRecords = {
+  post: (subdomain, address) => action(ENS_RECORDS[REQUEST], {subdomain, address}),
+  success: (record) => action(ENS_RECORDS[SUCCESS], {ensRecords: [record]}),
+  failure: (error) => action(ENS_RECORDS[FAILURE], {error})
+};
+
+export const FIDDLE = createRequestTypes('FIDDLE');
+export const fiddle = {
+  request: (codeToCompile) => action(FIDDLE[REQUEST], {codeToCompile}),
+  success: (fiddle) => action(FIDDLE[SUCCESS], {fiddles: [fiddle]}),
+  failure: (error) => action(FIDDLE[FAILURE], {error})
 };
 
 // Web Socket
@@ -148,12 +177,5 @@ export function initBlockHeader(){
     type: INIT_BLOCK_HEADER
   };
 }
-
-export const FIDDLE = createRequestTypes('FIDDLE');
-export const fiddle = {
-  request: (codeToCompile) => action(FIDDLE[REQUEST], {codeToCompile}),
-  success: (fiddle) => action(FIDDLE[SUCCESS], {fiddle}),
-  failure: (error) => action(FIDDLE[FAILURE], {error})
-};
 
 

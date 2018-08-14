@@ -68,20 +68,36 @@ export function fetchContract(payload) {
   return get(`/contract/${payload.contractName}`);
 }
 
-export function communicationVersion() {
-  return get(`/communication/version`);
+export function fetchVersions() {
+  return get('/versions');
+}
+
+export function fetchPlugins() {
+  return get('/plugins');
 }
 
 export function sendMessage(payload) {
   return post(`/communication/sendMessage`, payload.body);
 }
 
-export function listenToChannel(channel) {
-  return new WebSocket(`${constants.wsEndpoint}/communication/listenTo/${channel}`);
-}
-
 export function fetchContractProfile(payload) {
   return get(`/profiler/${payload.contractName}`);
+}
+
+export function fetchEnsRecord(payload) {
+  if (payload.name) {
+    return get('/ens/resolve', {params: payload});
+  } else {
+    return get('/ens/lookup', {params: payload});
+  }
+}
+
+export function postEnsRecord(payload) {
+  return post('/ens/register', payload);
+}
+
+export function listenToChannel(channel) {
+  return new WebSocket(`${constants.wsEndpoint}/communication/listenTo/${channel}`);
 }
 
 export function webSocketProcess(processName) {
