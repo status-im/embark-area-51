@@ -68,6 +68,14 @@ export function fetchContract(payload) {
   return get(`/contract/${payload.contractName}`);
 }
 
+export function postContractFunction(payload) {
+  return post(`/contract/${payload.contractName}/function`, payload);
+}
+
+export function postContractDeploy(payload) {
+  return post(`/contract/${payload.contractName}/deploy`, payload);
+}
+
 export function fetchVersions() {
   return get('/versions');
 }

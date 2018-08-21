@@ -66,6 +66,14 @@ export function getContractFile(state, filename) {
   return state.entities.contractFiles.find((contractFile => contractFile.filename === filename));
 }
 
+export function getContractFunctions(state, contractName) {
+  return state.entities.contractFunctions.filter((contractFunction => contractFunction.contractName === contractName));
+}
+
+export function getContractDeploys(state, contractName) {
+  return state.entities.contractDeploys.filter((contractDeploy => contractDeploy.contractName === contractName));
+}
+
 export function getVersions(state) {
   return state.entities.versions;
 }
