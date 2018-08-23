@@ -2,7 +2,6 @@ let utils = require('../../lib/utils/utils.js');
 
 class Console {
   constructor(options) {
-    const self = this;
     this.events = options.events;
     this.plugins = options.plugins;
     this.version = options.version;
