@@ -1,4 +1,5 @@
-let utils = require('../../lib/utils/utils.js');
+const utils = require('../../lib/utils/utils.js');
+const stringify = require('json-stringify-safe');
 
 class Console {
   constructor(options) {
@@ -18,7 +19,7 @@ class Console {
     let plugin = this.plugins.createPlugin('consoleApi', {});
     plugin.registerAPICall('post', '/embark-api/command', (req, res) => {
       this.executeCmd(req.body.command, (_err, result) => {
-        res.send({result});
+        res.send({result: stringify(result, null, 2)});
       });
     });
   }
