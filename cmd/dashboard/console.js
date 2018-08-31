@@ -1,4 +1,5 @@
-let utils = require('../../lib/utils/utils.js');
+const utils = require('../../lib/utils/utils.js');
+const stringify = require('json-stringify-safe');
 
 class Console {
   constructor(options) {
@@ -11,6 +12,19 @@ class Console {
     if (this.ipc.isServer()) {
       this.ipc.on('console:executeCmd', this.executeCmd.bind(this));
     }
+    this.registerApi();
+  }
+
+  registerApi() {
+    let plugin = this.plugins.createPlugin('consoleApi', {});
+    plugin.registerAPICall('post', '/embark-api/command', (req, res) => {
+      this.executeCmd(req.body.command, (_err, result) => {
+        if (typeof result === 'string') {
+          return res.send({result});
+        }
+        res.send({result: stringify(result, null, 2)});
+      });
+    });
   }
 
   processEmbarkCmd (cmd) {
