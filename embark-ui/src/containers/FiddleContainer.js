@@ -4,15 +4,15 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  fiddle as fiddleAction,
-  fiddleDeploy as fiddleDeployAction,
-  fiddleFile as fiddleFileAction
+  fiddleCompile,
+  fiddleDeploy,
+  fiddleFile
 } from '../actions';
 import Fiddle from '../components/Fiddle';
 import FiddleResults from '../components/FiddleResults';
 import FiddleResultsSummary from '../components/FiddleResultsSummary';
 import scrollToComponent from 'react-scroll-to-component';
-import {getFiddle, getFiddleDeploy} from "../reducers/selectors";
+import {getFiddleCompile, getFiddleDeploy, getFiddleProfile} from "../reducers/selectors";
 import CompilerError from "../components/CompilerError";
 import {List, Badge, Button} from 'tabler-react';
 import {NavLink} from 'react-router-dom';
@@ -65,7 +65,7 @@ class FiddleContainer extends Component {
     if (this.compileTimeout) clearTimeout(this.compileTimeout);
     this.compileTimeout = setTimeout(() => {
       this.setState({loadingMessage: 'Compiling...'});
-      this.props.postFiddle(newValue, Date.now());
+      this.props.postFiddleCompile(newValue, Date.now());
     }, immediate ? 0 : 1000);
   }
 
@@ -81,7 +81,7 @@ class FiddleContainer extends Component {
 
   _onDeployClick(_e) {
     this.setState({loadingMessage: 'Deploying...'});
-    this.props.postFiddleDeploy(this.props.fiddle.compilationResult);
+    this.props.postFiddleDeploy(this.props.compiledFiddle.compilationResult);
     scrollToComponent(this.deployedCardRef || this.fiddleResultsRef.current); // deployedCardRef null on first Deploy click
   }
 
@@ -165,15 +165,23 @@ class FiddleContainer extends Component {
   }
 
   render() {
-    const {fiddle, loading, fiddleError, fiddleDeployError, deployedContracts, fatalError} = this.props;
+    const {
+      compiledFiddle, 
+      profiledFiddle, 
+      loading, 
+      fiddleCompileError, 
+      fiddleDeployError, 
+      deployedFiddle, 
+      fatalError
+    } = this.props;
     const {loadingMessage, value, readOnly} = this.state;
     let warnings = [];
     let errors = [];
-    if (fiddle && fiddle.errors) {
-      warnings = this._renderErrors(fiddle.errors, "warning");
-      errors = this._renderErrors(fiddle.errors, "error");
+    if (compiledFiddle && compiledFiddle.errors) {
+      warnings = this._renderErrors(compiledFiddle.errors, "warning");
+      errors = this._renderErrors(compiledFiddle.errors, "error");
     }
-    const hasResult = Boolean(fiddle);
+    const hasResult = Boolean(compiledFiddle);
     return (
       <React.Fragment>
         <h1 className="page-title">Fiddle</h1>
@@ -184,11 +192,11 @@ class FiddleContainer extends Component {
           isLoading={loading}
           loadingMessage={loadingMessage}
           showFatalError={Boolean(fatalError)}
-          showFatalFiddle={Boolean(fiddleError)}
+          showFatalFiddle={Boolean(fiddleCompileError)}
           showFatalFiddleDeploy={Boolean(fiddleDeployError)}
           onDeployClick={(e) => this._onDeployClick(e)}
           isVisible={Boolean(fatalError || hasResult || loading)}
-          showDeploy={hasResult && Boolean(fiddle.compilationResult)}
+          showDeploy={hasResult && Boolean(compiledFiddle.compilationResult)}
           onWarningsClick={(e) => this._onErrorSummaryClick(e, this.errorsCardRef)}
           onErrorsClick={(e) => this._onErrorSummaryClick(e, this.warningsCardRef)}
           onFatalClick={(e) => this._onErrorSummaryClick(e, this.fatalCardRef)}
@@ -211,17 +219,17 @@ class FiddleContainer extends Component {
           errorsCard={this._renderErrorsCard(errors, "error")}
           warningsCard={this._renderErrorsCard(warnings, "warning")}
           fatalErrorCard={this._renderFatalCard("Fatal error", fatalError)}
-          fatalFiddleCard={this._renderFatalCard("Failed to compile", fiddleError)}
+          fatalFiddleCard={this._renderFatalCard("Failed to compile", fiddleCompileError)}
           fatalFiddleDeployCard={this._renderFatalCard("Failed to deploy", fiddleDeployError)}
-          compiledContractsCard={fiddle && fiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
-            <ContractFunctions contractProfile={fiddle.compilationResult}
-                                contractFunctions={deployedContracts}
+          compiledContractsCard={compiledFiddle && compiledFiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
+            <ContractFunctions contractProfile={profiledFiddle}
+                                contractFunctions={deployedFiddle}
                                 onlyConstructor
                                 postContractFunction={this._onDeployClick}/>
           )}
-          deployedContractsCard={deployedContracts && this._renderSuccessCard("Contract(s) deployed!",
+          deployedContractsCard={deployedFiddle && this._renderSuccessCard("Contract(s) deployed!",
             <Button
-              to={`/embark/contracts/${deployedContracts}/overview`}
+              to={`/embark/contracts/${deployedFiddle}/overview`}
               RootComponent={NavLink}
             >Play with my contract(s)</Button>
           )}
@@ -232,27 +240,32 @@ class FiddleContainer extends Component {
   }
 }
 function mapStateToProps(state) {
-  const fiddle = getFiddle(state);
+  const compiledFiddle = getFiddleCompile(state);
   const deployedFiddle = getFiddleDeploy(state);
+  const profiledFiddle = getFiddleProfile(state);
   return {
-    fiddle: fiddle.data,
-    deployedContracts: deployedFiddle.data,
-    fiddleError: fiddle.error,
+    compiledFiddle: compiledFiddle.data,
+    deployedFiddle: deployedFiddle.data,
+    profiledFiddle: profiledFiddle.data,
+    fiddleCompileError: compiledFiddle.error,
     fiddleDeployError: deployedFiddle.error,
+    fiddleProfileError: profiledFiddle.error,
     loading: state.loading,
-    lastFiddle: fiddle.data ? fiddle.data.codeToCompile : undefined,
+    lastFiddle: compiledFiddle.data ? compiledFiddle.data.codeToCompile : undefined,
     fatalError: state.errorMessage
   };
 }
 
 FiddleContainer.propTypes = {
-  fiddle: PropTypes.object,
-  fiddleError: PropTypes.string,
+  compiledFiddle: PropTypes.object,
+  fiddleCompileError: PropTypes.string,
   fiddleDeployError: PropTypes.string,
+  fiddleProfileError: PropTypes.string,
   loading: PropTypes.bool,
-  postFiddle: PropTypes.func,
+  postFiddleCompile: PropTypes.func,
   postFiddleDeploy: PropTypes.func,
-  deployedContracts: PropTypes.string,
+  deployedFiddle: PropTypes.string,
+  profiledFiddle: PropTypes.object,
   fetchLastFiddle: PropTypes.func,
   lastFiddle: PropTypes.any,
   fatalError: PropTypes.string
@@ -261,8 +274,8 @@ FiddleContainer.propTypes = {
 export default connect(
   mapStateToProps,
   {
-    postFiddle: fiddleAction.post,
-    postFiddleDeploy: fiddleDeployAction.post,
-    fetchLastFiddle: fiddleFileAction.request
+    postFiddleCompile: fiddleCompile.post,
+    postFiddleDeploy: fiddleDeploy.post,
+    fetchLastFiddle: fiddleFile.request
   },
 )(FiddleContainer);

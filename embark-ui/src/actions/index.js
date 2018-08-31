@@ -168,13 +168,13 @@ export const ensRecords = {
   failure: (error) => action(ENS_RECORDS[FAILURE], {error})
 };
 
-export const FIDDLE = createRequestTypes('FIDDLE');
-export const fiddle = {
-  post: (codeToCompile, timestamp) => action(FIDDLE[REQUEST], {codeToCompile, timestamp}),
+export const FIDDLE_COMPILE = createRequestTypes('FIDDLE_COMPILE');
+export const fiddleCompile = {
+  post: (codeToCompile, timestamp) => action(FIDDLE_COMPILE[REQUEST], {codeToCompile, timestamp}),
   success: (fiddle, payload) => {
-    return action(FIDDLE[SUCCESS], {fiddles: [{...fiddle, ...payload}]});
+    return action(FIDDLE_COMPILE[SUCCESS], {fiddleCompiles: [{...fiddle, ...payload}]});
   },
-  failure: (error) => action(FIDDLE[FAILURE], {error})
+  failure: (error) => action(FIDDLE_COMPILE[FAILURE], {error})
 };
 
 export const FIDDLE_DEPLOY = createRequestTypes('FIDDLE_DEPLOY');
@@ -191,6 +191,15 @@ export const fiddleFile = {
   request: () => action(FIDDLE_FILE[REQUEST]),
   success: (codeToCompile) => action(FIDDLE_FILE[SUCCESS], {codeToCompile}),
   failure: (error) => action(FIDDLE_FILE[FAILURE], {error})
+};
+
+export const FIDDLE_PROFILE = createRequestTypes('FIDDLE_PROFILE');
+export const fiddleProfile = {
+  post: (compiledCode, timestamp) => action(FIDDLE_PROFILE[REQUEST], {compiledCode, timestamp}),
+  success: (fiddleProfile, payload) => {
+    return action(FIDDLE_PROFILE[SUCCESS], {fiddleProfiles: [{...fiddleProfile, ...payload}]});
+  },
+  failure: (error) => action(FIDDLE_PROFILE[FAILURE], {error})
 };
 
 export const FILES = createRequestTypes('FILES');

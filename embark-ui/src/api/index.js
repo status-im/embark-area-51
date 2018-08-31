@@ -136,7 +136,7 @@ export function websocketGasOracle() {
   return new WebSocket(`${constants.wsEndpoint}/blockchain/gas/oracle`);
 }
 
-export function postFiddle(payload) {
+export function postFiddleCompile(payload) {
   return post('/contract/compile', payload);
 }
 
@@ -147,3 +147,8 @@ export function postFiddleDeploy(payload) {
 export function fetchFiles() {
   return get('/files');
 }
+
+export function postFiddleProfile(payload) {
+  return post('/contract/profiler/profile', {compiledContract: payload.compiledCode});
+}
+

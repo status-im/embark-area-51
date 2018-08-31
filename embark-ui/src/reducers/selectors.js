@@ -119,12 +119,12 @@ export function getMessages(state) {
   return messages;
 }
 
-export function getFiddle(state) {
-  const fiddleCompilation = last(state.entities.fiddles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
+export function getFiddleCompile(state) {
+  const fiddleCompilation = last(state.entities.fiddleCompiles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
   const isNoTempFileError = Boolean(fiddleCompilation && fiddleCompilation.codeToCompile && fiddleCompilation.codeToCompile.error && fiddleCompilation.codeToCompile.error.indexOf('ENOENT') > -1);
   return {
     data: fiddleCompilation,
-    error: isNoTempFileError ? undefined : state.errorEntities.fiddles
+    error: isNoTempFileError ? undefined : state.errorEntities.fiddleCompiles
   };
 }
 
@@ -132,6 +132,15 @@ export function getFiddleDeploy(state) {
   return {
     data: last(state.entities.fiddleDeploys),
     error: state.errorEntities.fiddleDeploys
+  };
+}
+
+export function getFiddleProfile(state) {
+  const fiddleProfile = last(state.entities.fiddleProfiles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
+  const isMissingContractError = Boolean(fiddleProfile && fiddleProfile.compiledContract && fiddleProfile.compiledContract.error && fiddleProfile.compiledContract.error.indexOf('MISSING_PARAM') > -1);
+  return {
+    data: fiddleProfile,
+    error: isMissingContractError ? undefined : state.errorEntities.fiddleProfiles
   };
 }
 
