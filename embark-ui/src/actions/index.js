@@ -113,14 +113,14 @@ export const contractFile = {
 
 export const CONTRACT_FUNCTION = createRequestTypes('CONTRACT_FUNCTION');
 export const contractFunction = {
-  post: (contractName, method, inputs) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs}),
+  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs, gasPrice}),
   success: (result, payload) => action(CONTRACT_FUNCTION[SUCCESS], {contractFunctions: [{...result, ...payload}]}),
   failure: (error) => action(CONTRACT_FUNCTION[FAILURE], {error})
 };
 
 export const CONTRACT_DEPLOY = createRequestTypes('CONTRACT_DEPLOY');
 export const contractDeploy = {
-  post: (contractName, method, inputs) => action(CONTRACT_DEPLOY[REQUEST], {contractName, method, inputs}),
+  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_DEPLOY[REQUEST], {contractName, method, inputs, gasPrice}),
   success: (result, payload) => action(CONTRACT_DEPLOY[SUCCESS], {contractDeploys: [{...result, ...payload}]}),
   failure: (error) => action(CONTRACT_DEPLOY[FAILURE], {error})
 };
@@ -198,6 +198,13 @@ export const files = {
   request: () => action(FILES[REQUEST]),
   success: (files) => action(FILES[SUCCESS], {files: files}),
   failure: (error) => action(FILES[FAILURE], {error})
+};
+
+export const ETH_GAS = createRequestTypes('ETH_GAS');
+export const ethGas = {
+  request: () => action(ETH_GAS[REQUEST]),
+  success: (gasStats) => action(ETH_GAS[SUCCESS], {gasStats: [gasStats]}),
+  failure: (error) => action(ETH_GAS[FAILURE], {error})
 };
 
 // Web Socket

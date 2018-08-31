@@ -24,6 +24,7 @@ const entitiesDefaultState = {
   versions: [],
   plugins: [],
   ensRecords: [],
+  gasStats: [],
   files: []
 };
 
