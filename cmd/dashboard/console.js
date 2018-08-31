@@ -11,6 +11,16 @@ class Console {
     if (this.ipc.isServer()) {
       this.ipc.on('console:executeCmd', this.executeCmd.bind(this));
     }
+    this.registerApi();
+  }
+
+  registerApi() {
+    let plugin = this.plugins.createPlugin('consoleApi', {});
+    plugin.registerAPICall('post', '/embark-api/command', (req, res) => {
+      this.executeCmd(req.body.command, (_err, result) => {
+        res.send({result});
+      });
+    });
   }
 
   processEmbarkCmd (cmd) {
