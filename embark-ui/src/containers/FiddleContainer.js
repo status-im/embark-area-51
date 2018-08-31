@@ -18,6 +18,7 @@ import {List, Badge, Button} from 'tabler-react';
 import {NavLink} from 'react-router-dom';
 import LoadingCardWithIcon from '../components/LoadingCardWithIcon';
 import {hashCode} from '../utils/utils';
+import ContractFunctions from '../components/ContractFunctions';
 
 class FiddleContainer extends Component {
 
@@ -74,8 +75,8 @@ class FiddleContainer extends Component {
     scrollToComponent(this.ace);
   }
 
-  _onErrorSummaryClick(e, refName) {
-    scrollToComponent(this[refName]);
+  _onErrorSummaryClick(e, ref) {
+    scrollToComponent(ref);
   }
 
   _onDeployClick(_e) {
@@ -188,9 +189,9 @@ class FiddleContainer extends Component {
           onDeployClick={(e) => this._onDeployClick(e)}
           isVisible={Boolean(fatalError || hasResult || loading)}
           showDeploy={hasResult && Boolean(fiddle.compilationResult)}
-          onWarningsClick={(e) => this._onErrorSummaryClick(e, "errorsCardRef")}
-          onErrorsClick={(e) => this._onErrorSummaryClick(e, "warningsCardRef")}
-          onFatalClick={(e) => this._onErrorSummaryClick(e, "fatalCardRef")}
+          onWarningsClick={(e) => this._onErrorSummaryClick(e, this.errorsCardRef)}
+          onErrorsClick={(e) => this._onErrorSummaryClick(e, this.warningsCardRef)}
+          onFatalClick={(e) => this._onErrorSummaryClick(e, this.fatalCardRef)}
         />
         <Fiddle
           value={value}
@@ -212,6 +213,12 @@ class FiddleContainer extends Component {
           fatalErrorCard={this._renderFatalCard("Fatal error", fatalError)}
           fatalFiddleCard={this._renderFatalCard("Failed to compile", fiddleError)}
           fatalFiddleDeployCard={this._renderFatalCard("Failed to deploy", fiddleDeployError)}
+          compiledContractsCard={fiddle && fiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
+            <ContractFunctions contractProfile={fiddle.compilationResult}
+                                contractFunctions={deployedContracts}
+                                onlyConstructor
+                                postContractFunction={this._onDeployClick}/>
+          )}
           deployedContractsCard={deployedContracts && this._renderSuccessCard("Contract(s) deployed!",
             <Button
               to={`/embark/contracts/${deployedContracts}/overview`}
