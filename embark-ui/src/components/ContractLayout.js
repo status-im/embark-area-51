@@ -14,33 +14,35 @@ import ContractDeploymentContainer from '../containers/ContractDeploymentContain
 import ContractProfileContainer from '../containers/ContractProfileContainer';
 import ContractSourceContainer from '../containers/ContractSourceContainer';
 
-const ContractLayout = ({match}) => (
+const ContractLayout = ({match, contractIsFiddle = false}) => (
   <Grid.Row>
     <Grid.Col md={3}>
-      <Page.Title className="my-5">Contract</Page.Title>
+      <Page.Title className="my-5">&nbsp;</Page.Title>
       <div>
         <List.Group transparent={true}>
           <List.GroupItem
             className="d-flex align-items-center"
             to={`/embark/contracts/${match.params.contractName}/overview`}
             icon="corner-left-up"
-            RootComponent={withRouter(NavLink)}
+            RootComponent={NavLink}
           >
-            Back to {match.params.contractName}
+            Overview
           </List.GroupItem>
-          <List.GroupItem
-            className="d-flex align-items-center"
-            to={`/embark/contracts/${match.params.contractName}/deployment`}
-            icon="users"
-            RootComponent={withRouter(NavLink)}
-          >
-            Deployment / Utils
-          </List.GroupItem>
+          {!contractIsFiddle && 
+            <List.GroupItem
+              className="d-flex align-items-center"
+              to={`/embark/contracts/${match.params.contractName}/deployment`}
+              icon="users"
+              RootComponent={NavLink}
+            >
+              Deployment / Utils
+            </List.GroupItem>
+          }
           <List.GroupItem
             className="d-flex align-items-center"
             to={`/embark/contracts/${match.params.contractName}/functions`}
             icon="book-open"
-            RootComponent={withRouter(NavLink)}
+            RootComponent={NavLink}
           >
             Functions
           </List.GroupItem>
@@ -48,7 +50,7 @@ const ContractLayout = ({match}) => (
             className="d-flex align-items-center"
             to={`/embark/contracts/${match.params.contractName}/source`}
             icon="activity"
-            RootComponent={withRouter(NavLink)}
+            RootComponent={NavLink}
           >
             Source Code
           </List.GroupItem>
@@ -56,7 +58,7 @@ const ContractLayout = ({match}) => (
             className="d-flex align-items-center"
             to={`/embark/contracts/${match.params.contractName}/profiler`}
             icon="server"
-            RootComponent={withRouter(NavLink)}
+            RootComponent={NavLink}
           >
             Profile
           </List.GroupItem>
@@ -64,7 +66,7 @@ const ContractLayout = ({match}) => (
             className="d-flex align-items-center"
             to={`/embark/contracts/${match.params.contractName}/logger`}
             icon="chevrons-right"
-            RootComponent={withRouter(NavLink)}
+            RootComponent={NavLink}
           >
             Logger
           </List.GroupItem>
@@ -85,7 +87,8 @@ const ContractLayout = ({match}) => (
 );
 
 ContractLayout.propTypes = {
-  match: PropTypes.object
+  match: PropTypes.object,
+  contractIsFiddle: PropTypes.bool
 };
 
 export default withRouter(ContractLayout);

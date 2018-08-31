@@ -4,7 +4,7 @@ import constants from '../constants';
 function get(path, params) {
   return axios.get(constants.httpEndpoint + path, params)
     .then((response) => {
-      return {response};
+      return {response, error: null};
     }).catch((error) => {
       return {response: null, error: error.message || 'Something bad happened'};
     });
@@ -13,7 +13,7 @@ function get(path, params) {
 function post(path, params) {
   return axios.post(constants.httpEndpoint + path, params)
     .then((response) => {
-      return {response};
+      return {response, error: null};
     })
     .catch((error) => {
       return {response: null, error: error.message || 'Something bad happened'};
@@ -108,6 +108,10 @@ export function fetchContractFile(payload) {
   return get('/files/contracts', {params: payload});
 }
 
+export function fetchLastFiddle() {
+  return get('/files/lastfiddle', {params: 'temp'});
+}
+
 export function listenToChannel(channel) {
   return new WebSocket(`${constants.wsEndpoint}/communication/listenTo/${channel}`);
 }
@@ -124,6 +128,10 @@ export function webSocketBlockHeader() {
   return new WebSocket(`${constants.wsEndpoint}/blockchain/blockHeader`);
 }
 
-export function fetchFiddle(payload) {
-  return post('/contract/compile', {code: payload.codeToCompile});
+export function postFiddle(payload) {
+  return post('/contract/compile', payload);
+}
+
+export function postFiddleDeploy(payload) {
+  return post('/contract/deploy', {compiledContract: payload.compiledCode});
 }

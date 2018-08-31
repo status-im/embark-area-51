@@ -5,7 +5,8 @@ import {all, call, fork, put, takeEvery, take} from 'redux-saga/effects';
 
 const {account, accounts, block, blocks, transaction, transactions, processes, commands, processLogs,
        contracts, contract, contractProfile, messageSend, versions, plugins, messageListen, fiddle,
-       ensRecord, ensRecords, contractLogs, contractFile, contractFunction, contractDeploy} = actions;
+       fiddleDeploy, ensRecord, ensRecords, contractLogs, contractFile, contractFunction, contractDeploy,
+       fiddleFile} = actions;
 
 function *doRequest(entity, apiFn, payload) {
   const {response, error} = yield call(apiFn, payload);
@@ -32,9 +33,11 @@ export const fetchContracts = doRequest.bind(null, contracts, api.fetchContracts
 export const fetchContract = doRequest.bind(null, contract, api.fetchContract);
 export const fetchContractProfile = doRequest.bind(null, contractProfile, api.fetchContractProfile);
 export const fetchContractFile = doRequest.bind(null, contractFile, api.fetchContractFile);
+export const fetchLastFiddle = doRequest.bind(null, fiddleFile, api.fetchLastFiddle);
 export const postContractFunction = doRequest.bind(null, contractFunction, api.postContractFunction);
 export const postContractDeploy = doRequest.bind(null, contractDeploy, api.postContractDeploy);
-export const fetchFiddle = doRequest.bind(null, fiddle, api.fetchFiddle);
+export const postFiddle = doRequest.bind(null, fiddle, api.postFiddle);
+export const postFiddleDeploy = doRequest.bind(null, fiddleDeploy, api.postFiddleDeploy);
 export const sendMessage = doRequest.bind(null, messageSend, api.sendMessage);
 export const fetchEnsRecord = doRequest.bind(null, ensRecord, api.fetchEnsRecord);
 export const postEnsRecord = doRequest.bind(null, ensRecords, api.postEnsRecord);
@@ -95,6 +98,10 @@ export function *watchFetchContractFile() {
   yield takeEvery(actions.CONTRACT_FILE[actions.REQUEST], fetchContractFile);
 }
 
+export function *watchFetchLastFiddle() {
+  yield takeEvery(actions.FIDDLE_FILE[actions.REQUEST], fetchLastFiddle);
+}
+
 export function *watchPostContractFunction() {
   yield takeEvery(actions.CONTRACT_FUNCTION[actions.REQUEST], postContractFunction);
 }
@@ -127,8 +134,16 @@ export function *watchListenToMessages() {
   yield takeEvery(actions.MESSAGE_LISTEN[actions.REQUEST], listenToMessages);
 }
 
-export function *watchFetchFiddle() {
-  yield takeEvery(actions.FIDDLE[actions.REQUEST], fetchFiddle);
+export function *watchPostFiddle() {
+  yield takeEvery(actions.FIDDLE[actions.REQUEST], postFiddle);
+}
+
+export function *watchFetchLastFiddleSuccess() {
+  yield takeEvery(actions.FIDDLE_FILE[actions.SUCCESS], postFiddle);
+}
+
+export function *watchPostFiddleDeploy() {
+  yield takeEvery(actions.FIDDLE_DEPLOY[actions.REQUEST], postFiddleDeploy);
 }
 
 function createChannel(socket) {
@@ -216,7 +231,10 @@ export default function *root() {
     fork(watchSendMessage),
     fork(watchFetchContract),
     fork(watchFetchTransaction),
-    fork(watchFetchFiddle),
+    fork(watchPostFiddle),
+    fork(watchPostFiddleDeploy),
+    fork(watchFetchLastFiddle),
+    fork(watchFetchLastFiddleSuccess),
     fork(watchFetchEnsRecord),
     fork(watchPostEnsRecords)
   ]);

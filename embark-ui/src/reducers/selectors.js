@@ -1,3 +1,5 @@
+import {last} from '../utils/utils';
+
 export function getAccounts(state) {
   return state.entities.accounts;
 }
@@ -51,7 +53,11 @@ export function getContractLogsByContract(state, contractName) {
 }
 
 export function getContracts(state) {
-  return state.entities.contracts;
+  return state.entities.contracts.filter(contract => !contract.isFiddle);
+}
+
+export function getFiddleContracts(state) {
+  return state.entities.contracts.filter(contract => contract.isFiddle);
 }
 
 export function getContract(state, contractName) {
@@ -103,7 +109,19 @@ export function getMessages(state) {
 }
 
 export function getFiddle(state) {
-  return state.entities.fiddles[state.entities.fiddles.length - 1];
+  const fiddleCompilation = last(state.entities.fiddles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
+  const isNoTempFileError = Boolean(fiddleCompilation && fiddleCompilation.codeToCompile && fiddleCompilation.codeToCompile.error && fiddleCompilation.codeToCompile.error.indexOf('ENOENT') > -1);
+  return {
+    data: fiddleCompilation,
+    error: isNoTempFileError ? undefined : state.errorEntities.fiddles
+  };
+}
+
+export function getFiddleDeploy(state) {
+  return {
+    data: last(state.entities.fiddleDeploys),
+    error: state.errorEntities.fiddleDeploys
+  };
 }
 
 export function getEnsRecords(state) {

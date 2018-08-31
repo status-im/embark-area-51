@@ -170,9 +170,27 @@ export const ensRecords = {
 
 export const FIDDLE = createRequestTypes('FIDDLE');
 export const fiddle = {
-  request: (codeToCompile) => action(FIDDLE[REQUEST], {codeToCompile}),
-  success: (fiddle) => action(FIDDLE[SUCCESS], {fiddles: [fiddle]}),
+  post: (codeToCompile, timestamp) => action(FIDDLE[REQUEST], {codeToCompile, timestamp}),
+  success: (fiddle, payload) => {
+    return action(FIDDLE[SUCCESS], {fiddles: [{...fiddle, ...payload}]});
+  },
   failure: (error) => action(FIDDLE[FAILURE], {error})
+};
+
+export const FIDDLE_DEPLOY = createRequestTypes('FIDDLE_DEPLOY');
+export const fiddleDeploy = {
+  post: (compiledCode) => action(FIDDLE_DEPLOY[REQUEST], {compiledCode}),
+  success: (response) => {
+    return action(FIDDLE_DEPLOY[SUCCESS], {fiddleDeploys: response.result});
+  },
+  failure: (error) => action(FIDDLE_DEPLOY[FAILURE], {error})
+};
+
+export const FIDDLE_FILE = createRequestTypes('FIDDLE_FILE');
+export const fiddleFile = {
+  request: () => action(FIDDLE_FILE[REQUEST]),
+  success: (codeToCompile) => action(FIDDLE_FILE[SUCCESS], {codeToCompile}),
+  failure: (error) => action(FIDDLE_FILE[FAILURE], {error})
 };
 
 // Web Socket

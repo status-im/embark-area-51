@@ -1,54 +1,69 @@
 import React, {Component} from 'react';
-import {Badge, Icon} from 'tabler-react';
+import {Badge, Icon, Loader} from 'tabler-react';
 import PropTypes from 'prop-types';
+import FiddleDeployButton from './FiddleDeployButton';
+import classNames from 'classnames';
 
-class FiddleResultsSummary extends Component{
+class FiddleResultsSummary extends Component {
 
-  render(){
-    const {warnings, errors, isFetching, hasResult, fatal} = this.props;
-    let renderings = [];
-    if(fatal) {
-      renderings.push(
-        <React.Fragment key="errors">
-          <a className="badge-link" href="#fatal"><Badge color="danger"><Icon name="slash"/></Badge></a>
-        </React.Fragment>
-      );
-    }
-    else if(isFetching){
-      renderings.push(
-        <React.Fragment key="compiling"><div className="loader"></div><span className="loader-text">Compiling...</span></React.Fragment>
-      );
-    }
-    else {
-      if(hasResult && !errors.length){
-        renderings.push(<Badge key="success" className="badge-link" color="success">Compiled</Badge>);
-      }
-      if(errors.length) renderings.push(
-        <React.Fragment key="errors">
-          <a className="badge-link" href="#errors"><Badge color="danger">{errors.length} error{errors.length > 1 ? "s" : ""}</Badge></a>
-        </React.Fragment>
-      );
-      if(warnings.length) renderings.push(
-        <React.Fragment key="warnings">
-          <a className="badge-link" href="#warnings"><Badge color="warning">{warnings.length} warning{warnings.length > 1 ? "s" : ""}</Badge></a>
-        </React.Fragment>
-      );
-    }
+  _renderFatal(fatalType, title) {
+    return <a className="badge-link" href={`#fatal-${fatalType}`} onClick={(e) => this.props.onFatalClick(e)}><Badge color="danger"><Icon name="slash" className="mr-1" />{title}</Badge></a>;
+  }
+
+  _renderError(errorType, numErrors) {
+    const color = errorType === 'error' ? 'danger' : 'warning';
+    const clickAction = errorType === 'error' ? this.props.onWarningsClick : this.props.onErrorsClick;
+    return <a className="badge-link" href={`#${errorType}`} onClick={(e) => clickAction(e)}><Badge color={color}>{numErrors} {errorType}{numErrors > 1 ? "s" : ""}</Badge></a>;
+  }
+
+  render() {
+    const {numWarnings, numErrors, isLoading, loadingMessage, isVisible, showDeploy, showFatalFiddle, showFatalFiddleDeploy, showFatalError} = this.props;
+    const classes = classNames("compilation-summary", {
+      'visible': isVisible
+    });
+
     return (
-      <div className={"compilation-summary " + ((hasResult || isFetching) ? "visible" : "")}>
-        {renderings}
-        {!(hasResult || isFetching) ? "&nbsp;" : ""}
+      <div className={classes}>
+        {isLoading &&
+          <Loader className="mr-1">
+            <span className="loader-text">{loadingMessage}</span>
+          </Loader>}
+
+        {showFatalError && this._renderFatal("error", "Error")}
+
+        {showFatalFiddle && this._renderFatal("compile", "Compilation")}
+
+        {showFatalFiddleDeploy && this._renderFatal("deploy", "Deployment")}
+
+        {numErrors > 0 && this._renderError("error", numErrors)}
+
+        {numWarnings > 0 && this._renderError("warning", numWarnings)}
+
+        {showDeploy &&
+          <React.Fragment key="success">
+            <Badge className="badge-link" color="success">Compiled</Badge>
+            <FiddleDeployButton onDeployClick={(e) => this.props.onDeployClick(e)} />
+          </React.Fragment>
+        }
       </div>
     );
   }
 }
 
 FiddleResultsSummary.propTypes = {
-  errors: PropTypes.array,
-  warnings: PropTypes.array,
-  isFetching: PropTypes.bool,
-  hasResult: PropTypes.bool,
-  fatal: PropTypes.string
+  isLoading: PropTypes.bool,
+  loadingMessage: PropTypes.string,
+  isVisible: PropTypes.bool,
+  showDeploy: PropTypes.bool,
+  showFatalError: PropTypes.bool,
+  showFatalFiddle: PropTypes.bool,
+  showFatalFiddleDeploy: PropTypes.bool,
+  onDeployClick: PropTypes.func,
+  numErrors: PropTypes.number,
+  numWarnings: PropTypes.number,
+  onWarningsClick: PropTypes.func.isRequired,
+  onErrorsClick: PropTypes.func.isRequired,
+  onFatalClick: PropTypes.func.isRequired
 };
 
 export default FiddleResultsSummary;
