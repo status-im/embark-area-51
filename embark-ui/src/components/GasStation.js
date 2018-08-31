@@ -12,10 +12,6 @@ const COLORS = {
 class GasStation extends Component {
   constructor(props) {
     super(props);
-    if (!props.gasStats) {
-      return console.error('gasStats is a needed Prop for GasStation');
-    }
-
     this.state = {
       gasSliderIndex: 0,
       copied: false
