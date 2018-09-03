@@ -28,6 +28,10 @@ export function getBlocks(state) {
   return state.entities.blocks;
 }
 
+export function getLastBlock(state) {
+  return state.entities.blocks[0];
+}
+
 export function getBlock(state, number) {
   return state.entities.blocks.find((block) => block.number.toString() === number);
 }
@@ -82,6 +86,13 @@ export function getContractDeploys(state, contractName) {
 
 export function getVersions(state) {
   return state.entities.versions;
+}
+
+export function getOracleGasStats(state) {
+  if (!state.entities.gasOracleStats.length) {
+    return {};
+  }
+  return state.entities.gasOracleStats[0];
 }
 
 export function isWeb3Enabled(state) {

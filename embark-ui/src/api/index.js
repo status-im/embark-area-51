@@ -1,8 +1,8 @@
 import axios from "axios";
 import constants from '../constants';
 
-function get(path, params) {
-  return axios.get(constants.httpEndpoint + path, params)
+function get(path, params, endpoint) {
+  return axios.get((endpoint || constants.httpEndpoint) + path, params)
     .then((response) => {
       return {response, error: null};
     }).catch((error) => {
@@ -108,6 +108,10 @@ export function fetchContractFile(payload) {
   return get('/files/contracts', {params: payload});
 }
 
+export function getEthGasAPI() {
+  return get('/blockchain/gas/oracle', {});
+}
+
 export function fetchLastFiddle() {
   return get('/files/lastfiddle', {params: 'temp'});
 }
@@ -126,6 +130,10 @@ export function webSocketContractLogs() {
 
 export function webSocketBlockHeader() {
   return new WebSocket(`${constants.wsEndpoint}/blockchain/blockHeader`);
+}
+
+export function websocketGasOracle() {
+  return new WebSocket(`${constants.wsEndpoint}/blockchain/gas/oracle`);
 }
 
 export function postFiddle(payload) {

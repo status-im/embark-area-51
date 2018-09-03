@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {contractProfile as contractProfileAction, contractDeploy as contractDeployAction} from '../actions';
 import ContractFunctions from '../components/ContractFunctions';
 import DataWrapper from "../components/DataWrapper";
+import GasStationContainer from "../containers/GasStationContainer";
 import {getContractProfile, getContractDeploys} from "../reducers/selectors";
 
 class ContractDeploymentContainer extends Component {
@@ -15,14 +16,17 @@ class ContractDeploymentContainer extends Component {
 
   render() {
     return (
-      <DataWrapper shouldRender={this.props.contractProfile !== undefined }
+      <DataWrapper shouldRender={this.props.contractProfile !== undefined}
                    {...this.props}
                    render={({contractProfile, contractDeploys, postContractDeploy}) => (
-        <ContractFunctions contractProfile={contractProfile}
-                           contractFunctions={contractDeploys}
-                           onlyConstructor
-                           postContractFunction={postContractDeploy}/>
-     )} />
+                     <React.Fragment>
+                       <ContractFunctions contractProfile={contractProfile}
+                                          contractFunctions={contractDeploys}
+                                          onlyConstructor
+                                          postContractFunction={postContractDeploy}/>
+                       <GasStationContainer/>
+                     </React.Fragment>
+                   )}/>
     );
   }
 }

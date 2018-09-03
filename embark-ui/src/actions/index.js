@@ -113,14 +113,14 @@ export const contractFile = {
 
 export const CONTRACT_FUNCTION = createRequestTypes('CONTRACT_FUNCTION');
 export const contractFunction = {
-  post: (contractName, method, inputs) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs}),
+  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs, gasPrice}),
   success: (result, payload) => action(CONTRACT_FUNCTION[SUCCESS], {contractFunctions: [{...result, ...payload}]}),
   failure: (error) => action(CONTRACT_FUNCTION[FAILURE], {error})
 };
 
 export const CONTRACT_DEPLOY = createRequestTypes('CONTRACT_DEPLOY');
 export const contractDeploy = {
-  post: (contractName, method, inputs) => action(CONTRACT_DEPLOY[REQUEST], {contractName, method, inputs}),
+  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_DEPLOY[REQUEST], {contractName, method, inputs, gasPrice}),
   success: (result, payload) => action(CONTRACT_DEPLOY[SUCCESS], {contractDeploys: [{...result, ...payload}]}),
   failure: (error) => action(CONTRACT_DEPLOY[FAILURE], {error})
 };
@@ -200,10 +200,18 @@ export const files = {
   failure: (error) => action(FILES[FAILURE], {error})
 };
 
+export const GAS_ORACLE = createRequestTypes('GAS_ORACLE');
+export const gasOracle = {
+  request: () => action(GAS_ORACLE[REQUEST]),
+  success: (gasOracleStats) => action(GAS_ORACLE[SUCCESS], {gasOracleStats: [gasOracleStats]}),
+  failure: (error) => action(GAS_ORACLE[FAILURE], {error})
+};
+
 // Web Socket
 export const WATCH_NEW_PROCESS_LOGS = 'WATCH_NEW_PROCESS_LOGS';
 export const WATCH_NEW_CONTRACT_LOGS = 'WATCH_NEW_CONTRACT_LOGS';
 export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
+export const WATCH_GAS_ORACLE = 'WATCH_GAS_ORACLE';
 
 export function listenToProcessLogs(processName) {
   return {
@@ -221,6 +229,12 @@ export function listenToContractLogs() {
 export function initBlockHeader(){
   return {
     type: INIT_BLOCK_HEADER
+  };
+}
+
+export function listenToGasOracle(){
+  return {
+    type: WATCH_GAS_ORACLE
   };
 }
 

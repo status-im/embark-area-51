@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import {contractProfile as contractProfileAction, contractFunction as contractFunctionAction} from '../actions';
 import ContractFunctions from '../components/ContractFunctions';
 import DataWrapper from "../components/DataWrapper";
+import GasStationContainer from "../containers/GasStationContainer";
 import {getContractProfile, getContractFunctions} from "../reducers/selectors";
 
 class ContractFunctionsContainer extends Component {
@@ -15,13 +16,17 @@ class ContractFunctionsContainer extends Component {
 
   render() {
     return (
-      <DataWrapper shouldRender={this.props.contractProfile !== undefined }
+      <DataWrapper shouldRender={this.props.contractProfile !== undefined}
                    {...this.props}
                    render={({contractProfile, contractFunctions, postContractFunction}) => (
-        <ContractFunctions contractProfile={contractProfile}
-                           contractFunctions={contractFunctions}
-                           postContractFunction={postContractFunction}/>
-      )} />
+                     <React.Fragment>
+                       <ContractFunctions contractProfile={contractProfile}
+                                          contractFunctions={contractFunctions}
+                                          postContractFunction={postContractFunction}/>
+
+                       <GasStationContainer/>
+                     </React.Fragment>
+                   )}/>
     );
   }
 }
