@@ -1,3 +1,5 @@
+import {lastTimestamp} from '../utils/utils';
+
 export const REQUEST = 'REQUEST';
 export const SUCCESS = 'SUCCESS';
 export const FAILURE = 'FAILURE';
@@ -170,9 +172,17 @@ export const ensRecords = {
 
 export const FIDDLE_COMPILE = createRequestTypes('FIDDLE_COMPILE');
 export const fiddleCompile = {
-  post: (codeToCompile, timestamp) => action(FIDDLE_COMPILE[REQUEST], {codeToCompile, timestamp}),
+  post: (codeToCompile, timestamp) => {
+    return action(FIDDLE_COMPILE[REQUEST], {codeToCompile, timestamp});
+  },
   success: (fiddle, payload) => {
-    return action(FIDDLE_COMPILE[SUCCESS], {fiddleCompiles: [{...fiddle, ...payload}]});
+    let {timestamp, codeToCompile} = payload;
+    if(payload.type === FIDDLE_FILE[SUCCESS]){
+      const lastFiddle = lastTimestamp(payload.fiddleFiles);
+      timestamp = lastFiddle.timestamp;
+      codeToCompile = lastFiddle.codeToCompile;
+    }
+    return action(FIDDLE_COMPILE[SUCCESS], {fiddleCompiles: [{...fiddle, timestamp, codeToCompile}]});
   },
   failure: (error) => action(FIDDLE_COMPILE[FAILURE], {error})
 };
@@ -191,7 +201,10 @@ export const fiddleFile = {
   request: (timestamp) => {
     return action(FIDDLE_FILE[REQUEST], {timestamp});
   },
-  success: (codeToCompile, payload) => action(FIDDLE_FILE[SUCCESS], {fiddleFiles: [{codeToCompile, ...payload}]}),
+  success: (codeToCompile, payload) => {
+    const {timestamp} = payload;
+    return action(FIDDLE_FILE[SUCCESS], {fiddleFiles: [{codeToCompile, timestamp}]});
+  },
   failure: (error, payload) => {
     return action(FIDDLE_FILE[FAILURE], {fiddleFiles: [{error, ...payload}]});
   }
@@ -203,7 +216,13 @@ export const fiddleProfile = {
     return action(FIDDLE_PROFILE[REQUEST], {compiledCode, timestamp});
   },
   success: (fiddleProfile, payload) => {
-    return action(FIDDLE_PROFILE[SUCCESS], {fiddleProfiles: [{...fiddleProfile, ...payload}]});
+    let {timestamp, compilationResult} = payload;
+    if(payload.type === FIDDLE_COMPILE[SUCCESS]){
+      const lastFiddle = lastTimestamp(payload.fiddleCompiles);
+      timestamp = lastFiddle.timestamp;
+      compilationResult = lastFiddle.compilationResult;
+    }
+    return action(FIDDLE_PROFILE[SUCCESS], {fiddleProfiles: [{fiddleProfile, timestamp, compilationResult}]});
   },
   failure: (error) => action(FIDDLE_PROFILE[FAILURE], {error})
 };

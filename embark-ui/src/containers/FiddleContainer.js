@@ -246,7 +246,7 @@ function mapStateToProps(state) {
   return {
     compiledFiddle: compiledFiddle.data,
     deployedFiddle: deployedFiddle.data,
-    profiledFiddle: profiledFiddle.data,
+    profiledFiddle: profiledFiddle.data ? profiledFiddle.data.fiddleProfile : undefined,
     fiddleCompileError: compiledFiddle.error,
     fiddleDeployError: deployedFiddle.error,
     fiddleProfileError: profiledFiddle.error,

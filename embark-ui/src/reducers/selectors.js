@@ -1,4 +1,4 @@
-import {last} from '../utils/utils';
+import {findByTimestamp, lastTimestamp} from '../utils/utils';
 
 export function getAccounts(state) {
   return state.entities.accounts;
@@ -120,27 +120,29 @@ export function getMessages(state) {
 }
 
 export function getFiddleCompile(state) {
-  const fiddleCompilation = last(state.entities.fiddleCompiles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
-  const isNoTempFileError = Boolean(fiddleCompilation && fiddleCompilation.codeToCompile && fiddleCompilation.codeToCompile.error && fiddleCompilation.codeToCompile.error.indexOf('ENOENT') > -1);
+  const fiddleCompilation = lastTimestamp(state.entities.fiddleCompiles);
+  const timestamp = fiddleCompilation ? fiddleCompilation.timestamp : undefined;
   return {
     data: fiddleCompilation,
-    error: isNoTempFileError ? undefined : state.errorEntities.fiddleCompiles
+    error: findByTimestamp(state.errorEntities.fiddleCompiles, timestamp)
   };
 }
 
 export function getFiddleDeploy(state) {
+  const fiddleDeploy = lastTimestamp(state.entities.fiddleDeploys);
+  const timestamp = fiddleDeploy ? fiddleDeploy.timestamp : undefined;
   return {
-    data: last(state.entities.fiddleDeploys),
-    error: state.errorEntities.fiddleDeploys
+    data: fiddleDeploy,
+    error: findByTimestamp(state.errorEntities.fiddleDeploys, timestamp)
   };
 }
 
 export function getFiddleProfile(state) {
-  const fiddleProfile = last(state.entities.fiddleProfiles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
-  const isMissingContractError = Boolean(fiddleProfile && fiddleProfile.compiledContract && fiddleProfile.compiledContract.error && fiddleProfile.compiledContract.error.indexOf('MISSING_PARAM') > -1);
+  const fiddleProfile = lastTimestamp(state.entities.fiddleProfiles);
+  const timestamp = fiddleProfile? fiddleProfile.timestamp : undefined;
   return {
     data: fiddleProfile,
-    error: isMissingContractError ? undefined : state.errorEntities.fiddleProfiles
+    error: findByTimestamp(state.errorEntities.fiddleProfiles, timestamp)
   };
 }
 

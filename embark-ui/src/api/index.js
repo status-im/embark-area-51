@@ -1,5 +1,7 @@
 import axios from "axios";
 import constants from '../constants';
+import {FIDDLE_COMPILE, FIDDLE_FILE, SUCCESS} from '../actions';
+import {lastTimestamp} from '../utils/utils';
 
 function get(path, params, endpoint) {
   return axios.get((endpoint || constants.httpEndpoint) + path, params)
@@ -137,7 +139,13 @@ export function websocketGasOracle() {
 }
 
 export function postFiddleCompile(payload) {
-  return post('/contract/compile', payload);
+  let {timestamp, codeToCompile} = payload;
+  if(payload.type === FIDDLE_FILE[SUCCESS]){
+    const lastFiddle = lastTimestamp(payload.fiddleFiles);
+    timestamp = lastFiddle.timestamp;
+    codeToCompile = lastFiddle.codeToCompile;
+  }
+  return post('/contract/compile', {timestamp, codeToCompile});
 }
 
 export function postFiddleDeploy(payload) {
@@ -149,6 +157,12 @@ export function fetchFiles() {
 }
 
 export function postFiddleProfile(payload) {
-  return post('/profiler/profile', payload);
+  let {timestamp, compilationResult} = payload;
+  if(payload.type === FIDDLE_COMPILE[SUCCESS]){
+    const lastFiddle = lastTimestamp(payload.fiddleCompiles);
+    timestamp = lastFiddle.timestamp;
+    compilationResult = lastFiddle.compilationResult;
+  }
+  return post('/profiler/profile', {timestamp, compilationResult});
 }
 
