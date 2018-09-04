@@ -196,7 +196,7 @@ class FiddleContainer extends Component {
           showFatalFiddleDeploy={Boolean(fiddleDeployError)}
           onDeployClick={(e) => this._onDeployClick(e)}
           isVisible={Boolean(fatalError || hasResult || loading)}
-          showDeploy={hasResult && Boolean(compiledFiddle.compilationResult)}
+          showDeploy={hasResult && Object.keys(compiledFiddle.compilationResult).length > 0}
           onWarningsClick={(e) => this._onErrorSummaryClick(e, this.errorsCardRef)}
           onErrorsClick={(e) => this._onErrorSummaryClick(e, this.warningsCardRef)}
           onFatalClick={(e) => this._onErrorSummaryClick(e, this.fatalCardRef)}
@@ -221,7 +221,7 @@ class FiddleContainer extends Component {
           fatalErrorCard={this._renderFatalCard("Fatal error", fatalError)}
           fatalFiddleCard={this._renderFatalCard("Failed to compile", fiddleCompileError)}
           fatalFiddleDeployCard={this._renderFatalCard("Failed to deploy", fiddleDeployError)}
-          compiledContractsCard={compiledFiddle && compiledFiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
+          compiledContractsCard={compiledFiddle && Object.keys(compiledFiddle.compilationResult).length > 0 && this._renderSuccessCard("Contract(s) compiled!",
             profiledFiddle && <ContractFunctions contractProfile={profiledFiddle}
                                 contractFunctions={[]}
                                 onlyConstructor
