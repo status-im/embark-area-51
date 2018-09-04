@@ -223,7 +223,7 @@ class FiddleContainer extends Component {
           fatalFiddleDeployCard={this._renderFatalCard("Failed to deploy", fiddleDeployError)}
           compiledContractsCard={compiledFiddle && compiledFiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
             profiledFiddle && <ContractFunctions contractProfile={profiledFiddle}
-                                contractFunctions={deployedFiddle}
+                                contractFunctions={[]}
                                 onlyConstructor
                                 postContractFunction={this._onDeployClick}/>
           )}

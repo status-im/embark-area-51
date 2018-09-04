@@ -222,6 +222,7 @@ export const fiddleProfile = {
       timestamp = lastFiddle.timestamp;
       compilationResult = lastFiddle.compilationResult;
     }
+    if(fiddleProfile === '') fiddleProfile = undefined;
     return action(FIDDLE_PROFILE[SUCCESS], {fiddleProfiles: [{fiddleProfile, timestamp, compilationResult}]});
   },
   failure: (error) => action(FIDDLE_PROFILE[FAILURE], {error})
