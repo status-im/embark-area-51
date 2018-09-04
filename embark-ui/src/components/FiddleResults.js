@@ -1,16 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const FiddleResults = ({warningsCard, errorsCard, fatalFiddleCard, fatalFiddleDeployCard, deployedContractsCard, fatalErrorCard, forwardedRef}) => (
-  <div ref={forwardedRef}>
-    {fatalErrorCard}
-    {fatalFiddleCard}
-    {fatalFiddleDeployCard}
-    {deployedContractsCard}
-    {errorsCard}
-    {warningsCard}
-  </div>
-);
+const FiddleResults = ({
+  warningsCard,
+  errorsCard,
+  fatalFiddleCard,
+  fatalFiddleDeployCard,
+  compiledContractsCard,
+  deployedContractsCard,
+  fatalErrorCard,
+  forwardedRef}) => (
+    <div ref={forwardedRef}>
+      {fatalErrorCard}
+      {fatalFiddleCard}
+      {fatalFiddleDeployCard}
+      {compiledContractsCard}
+      {deployedContractsCard}
+      {errorsCard}
+      {warningsCard}
+    </div>
+  );
 
 FiddleResults.propTypes = {
   errorsCard: PropTypes.node,
@@ -19,7 +28,8 @@ FiddleResults.propTypes = {
   fatalFiddleDeployCard: PropTypes.node,
   deployedContractsCard: PropTypes.node,
   fatalErrorCard: PropTypes.node,
-  forwardedRef: PropTypes.any
+  forwardedRef: PropTypes.any,
+  compiledContractsCard: PropTypes.node
 };
 
 export default FiddleResults;

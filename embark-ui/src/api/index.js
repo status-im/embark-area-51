@@ -1,5 +1,7 @@
 import axios from "axios";
 import constants from '../constants';
+import {FIDDLE_COMPILE, FIDDLE_FILE, SUCCESS} from '../actions';
+import {lastTimestamp} from '../utils/utils';
 
 function get(path, params, endpoint) {
   return axios.get((endpoint || constants.httpEndpoint) + path, params)
@@ -136,14 +138,31 @@ export function websocketGasOracle() {
   return new WebSocket(`${constants.wsEndpoint}/blockchain/gas/oracle`);
 }
 
-export function postFiddle(payload) {
-  return post('/contract/compile', payload);
+export function postFiddleCompile(payload) {
+  let {timestamp, codeToCompile} = payload;
+  if(payload.type === FIDDLE_FILE[SUCCESS]){
+    const lastFiddle = lastTimestamp(payload.fiddleFiles);
+    timestamp = lastFiddle.timestamp;
+    codeToCompile = lastFiddle.codeToCompile;
+  }
+  return post('/contract/compile', {timestamp, codeToCompile});
 }
 
 export function postFiddleDeploy(payload) {
-  return post('/contract/deploy', {compiledContract: payload.compiledCode});
+  return post('/contract/deploy', payload);
 }
 
 export function fetchFiles() {
   return get('/files');
 }
+
+export function postFiddleProfile(payload) {
+  let {timestamp, compilationResult} = payload;
+  if(payload.type === FIDDLE_COMPILE[SUCCESS]){
+    const lastFiddle = lastTimestamp(payload.fiddleCompiles);
+    timestamp = lastFiddle.timestamp;
+    compilationResult = lastFiddle.compilationResult;
+  }
+  return post('/profiler/profile', {timestamp, compilationResult});
+}
+

@@ -1,4 +1,4 @@
-import {last} from '../utils/utils';
+import {findByTimestamp, lastTimestamp} from '../utils/utils';
 
 export function getAccounts(state) {
   return state.entities.accounts;
@@ -119,19 +119,30 @@ export function getMessages(state) {
   return messages;
 }
 
-export function getFiddle(state) {
-  const fiddleCompilation = last(state.entities.fiddles.sort((a, b) => { return (a.timestamp || 0) - (b.timestamp || 0); }));
-  const isNoTempFileError = Boolean(fiddleCompilation && fiddleCompilation.codeToCompile && fiddleCompilation.codeToCompile.error && fiddleCompilation.codeToCompile.error.indexOf('ENOENT') > -1);
+export function getFiddleCompile(state) {
+  const fiddleCompilation = lastTimestamp(state.entities.fiddleCompiles);
+  const timestamp = fiddleCompilation ? fiddleCompilation.timestamp : undefined;
   return {
     data: fiddleCompilation,
-    error: isNoTempFileError ? undefined : state.errorEntities.fiddles
+    error: findByTimestamp(state.errorEntities.fiddleCompiles, timestamp)
   };
 }
 
 export function getFiddleDeploy(state) {
+  const fiddleDeploy = lastTimestamp(state.entities.fiddleDeploys);
+  const timestamp = fiddleDeploy ? fiddleDeploy.timestamp : undefined;
   return {
-    data: last(state.entities.fiddleDeploys),
-    error: state.errorEntities.fiddleDeploys
+    data: fiddleDeploy,
+    error: findByTimestamp(state.errorEntities.fiddleDeploys, timestamp)
+  };
+}
+
+export function getFiddleProfile(state) {
+  const fiddleProfile = lastTimestamp(state.entities.fiddleProfiles);
+  const timestamp = fiddleProfile? fiddleProfile.timestamp : undefined;
+  return {
+    data: fiddleProfile,
+    error: findByTimestamp(state.errorEntities.fiddleProfiles, timestamp)
   };
 }
 

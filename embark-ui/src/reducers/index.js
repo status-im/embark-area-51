@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {REQUEST, SUCCESS} from "../actions";
+import {REQUEST, SUCCESS, FAILURE} from "../actions";
 
 const BN_FACTOR = 10000;
 const voidAddress = '0x0000000000000000000000000000000000000000';
@@ -19,8 +19,10 @@ const entitiesDefaultState = {
   commands: [],
   messages: [],
   messageChannels: [],
-  fiddles: [],
+  fiddleCompiles: [],
   fiddleDeploys: [],
+  fiddleProfiles: [],
+  fiddleFiles: [],
   versions: [],
   plugins: [],
   ensRecords: [],
@@ -121,7 +123,7 @@ function errorMessage(state = null, action) {
 }
 
 function errorEntities(state = {}, action) {
-  if (!action.type.endsWith(SUCCESS)) {
+  if (!action.type.endsWith(FAILURE)) {
     return state;
   }
   let newState = {};
