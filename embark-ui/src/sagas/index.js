@@ -13,7 +13,7 @@ function *doRequest(entity, apiFn, payload) {
   if(response) {
     yield put(entity.success(response.data, payload));
   } else if (error) {
-    yield put(entity.failure(error));
+    yield put(entity.failure(error, payload));
   }
 }
 
@@ -264,6 +264,7 @@ export default function *root() {
     fork(watchFetchContract),
     fork(watchFetchTransaction),
     fork(watchPostFiddleCompile),
+    fork(watchPostFiddleCompileSuccess),
     fork(watchPostFiddleDeploy),
     fork(watchPostFiddleProfile),
     fork(watchFetchLastFiddle),

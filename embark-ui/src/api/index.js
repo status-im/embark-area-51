@@ -141,7 +141,7 @@ export function postFiddleCompile(payload) {
 }
 
 export function postFiddleDeploy(payload) {
-  return post('/contract/deploy', {compiledContract: payload.compiledCode});
+  return post('/contract/deploy', payload);
 }
 
 export function fetchFiles() {
@@ -149,6 +149,6 @@ export function fetchFiles() {
 }
 
 export function postFiddleProfile(payload) {
-  return post('/contract/profiler/profile', {compiledContract: payload.compiledCode});
+  return post('/profiler/profile', payload);
 }
 

@@ -41,7 +41,7 @@ class FiddleContainer extends Component {
 
   componentDidMount() {
     this.setState({loadingMessage: 'Loading saved state...'});
-    this.props.fetchLastFiddle();
+    this.props.fetchLastFiddle(Date.now());
   }
 
   componentDidUpdate(prevProps) {
@@ -222,7 +222,7 @@ class FiddleContainer extends Component {
           fatalFiddleCard={this._renderFatalCard("Failed to compile", fiddleCompileError)}
           fatalFiddleDeployCard={this._renderFatalCard("Failed to deploy", fiddleDeployError)}
           compiledContractsCard={compiledFiddle && compiledFiddle.compilationResult && this._renderSuccessCard("Contract(s) compiled!",
-            <ContractFunctions contractProfile={profiledFiddle}
+            profiledFiddle && <ContractFunctions contractProfile={profiledFiddle}
                                 contractFunctions={deployedFiddle}
                                 onlyConstructor
                                 postContractFunction={this._onDeployClick}/>
