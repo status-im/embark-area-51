@@ -13,6 +13,13 @@ function action(type, payload = {}) {
   return {type, ...payload};
 }
 
+export const AUTHORIZE = createRequestTypes('AUTHORIZE');
+export const authorize = {
+  request: (token, callback) => action(AUTHORIZE[REQUEST], {token, callback}),
+  success: () => action(AUTHORIZE[SUCCESS]),
+  failure: (error) => action(AUTHORIZE[FAILURE], {error})
+};
+
 export const ACCOUNTS = createRequestTypes('ACCOUNTS');
 export const accounts = {
   request: () => action(ACCOUNTS[REQUEST]),
@@ -217,6 +224,20 @@ export const saveCurrentFile = {
   request: (file) => action(SAVE_CURRENT_FILE[REQUEST], file),
   success: (file) => action(SAVE_CURRENT_FILE[SUCCESS], {currentFiles: [file]}),
   failure: () => action(SAVE_CURRENT_FILE[FAILURE])
+};
+
+export const GET_TOKEN = createRequestTypes('TOKEN');
+export const getToken = {
+  request: (callback) => action(GET_TOKEN[REQUEST], {callback}),
+  success: (token) => action(GET_TOKEN[SUCCESS], {token}),
+  failure: () => action(GET_TOKEN[FAILURE])
+};
+
+export const POST_TOKEN = createRequestTypes('POST_TOKEN');
+export const postToken = {
+  request: (token) => action(POST_TOKEN[REQUEST], {token}),
+  success: (token) => action(POST_TOKEN[SUCCESS], {token}),
+  failure: () => action(POST_TOKEN[FAILURE])
 };
 
 export const GAS_ORACLE = createRequestTypes('GAS_ORACLE');
