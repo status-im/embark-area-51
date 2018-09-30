@@ -1,0 +1,35 @@
+{
+  "name": "embark-ui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ansi-to-html": "^0.6.6",
+    "autoscroll-react": "^3.2.0",
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "connected-react-router": "^4.3.0",
+    "ethereumjs-units": "0.2.0",
+    "history": "^4.7.2",
+    "prop-types": "^15.6.2",
+    "qs": "^6.5.2",
+    "react": "^16.4.2",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-dom": "^16.4.1",
+    "react-monaco-editor": "^0.18.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "react-scroll-to-component": "^1.0.2",
+    "react-treebeard": "^2.1.0",
+    "redux": "^4.0.0",
+    "redux-saga": "^0.16.0",
+    "tabler-react": "^1.18.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "homepage": "http://localhost:8000/embark"
+}

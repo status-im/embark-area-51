@@ -4,14 +4,23 @@
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2017
+        "ecmaVersion": 2018,
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
     "globals": {
       "__": true
     },
+    "plugins": [
+        "react"
+    ],
     "rules": {
         "accessor-pairs": "error",
         "array-bracket-newline": "error",
@@ -58,7 +67,7 @@
         ],
         "dot-notation": "off",
         "eol-last": "error",
-        "eqeqeq": "off",
+        "eqeqeq": "error",
         "for-direction": "error",
         "func-call-spacing": "error",
         "func-name-matching": "error",
@@ -111,6 +120,7 @@
         "no-confusing-arrow": "error",
         "no-console": "off",
         "no-continue": "off",
+        "no-debugger": "warn",
         "no-div-regex": "error",
         "no-duplicate-imports": "error",
         "no-else-return": 2,
@@ -208,8 +218,7 @@
         "nonblock-statement-body-position": "error",
         "object-curly-newline": "off",
         "object-curly-spacing": [
-            "error",
-            "never"
+            "off"
         ],
         "object-property-newline": "off",
         "object-shorthand": "off",
@@ -246,7 +255,7 @@
             "error",
             "last"
         ],
-        "sort-imports": "error",
+        "sort-imports": "off",
         "sort-keys": "off",
         "sort-vars": "off",
         "space-before-blocks": "off",
