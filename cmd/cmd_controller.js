@@ -18,7 +18,7 @@ class EmbarkController {
     let Config = require('../lib/core/config.js');
 
     this.events = new Events();
-    this.logger = new Logger({logLevel: 'debug', events: this.events});
+    this.logger = new Logger({logLevel: 'debug', events: this.events, context: this.context});
 
     this.config = new Config({env: env, logger: this.logger, events: this.events, context: this.context});
     this.config.loadConfigFiles(options);
