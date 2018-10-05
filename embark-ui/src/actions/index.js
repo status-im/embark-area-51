@@ -258,7 +258,9 @@ export const gasOracle = {
 export const WATCH_NEW_PROCESS_LOGS = 'WATCH_NEW_PROCESS_LOGS';
 export const WATCH_NEW_CONTRACT_LOGS = 'WATCH_NEW_CONTRACT_LOGS';
 export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
+export const STOP_BLOCK_HEADER = 'STOP_BLOCK_HEADER';
 export const WATCH_GAS_ORACLE = 'WATCH_GAS_ORACLE';
+export const STOP_GAS_ORACLE = 'STOP_GAS_ORACLE';
 
 export function listenToProcessLogs(processName) {
   return {
@@ -279,9 +281,21 @@ export function initBlockHeader(){
   };
 }
 
+export function stopBlockHeader(){
+  return {
+    type: STOP_BLOCK_HEADER
+  };
+}
+
 export function listenToGasOracle(){
   return {
     type: WATCH_GAS_ORACLE
+  };
+}
+
+export function stopGasOracle(){
+  return {
+    type: STOP_GAS_ORACLE
   };
 }
 
