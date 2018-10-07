@@ -350,21 +350,26 @@ class Cmd {
     program
       .command('scaffold [contract] [environment]')
       .option('--framework <framework>', 'UI framework to use. (default: react)')
-      .action(function(contract, env, options){
-        let environment = env || 'development';
+      .option('--overwrite', 'Overwrite existing files. (default: false)')
 
+      .action(function(contract, env, options){
         if(contract === undefined){
           console.log("contract name is required");
           process.exit(0);
         }
-
-        embark.initConfig(environment, {
-          embarkConfig: 'embark.json', interceptLogs: false
-        });
         
+        checkDeps();
+        i18n.setOrDetectLocale(options.locale);
+        options.env = env || 'development';
+        options.logFile = options.logfile; // fix casing
+        options.logLevel = options.loglevel; // fix casing
+        options.onlyCompile = options.contracts;
+        options.client = options.client || 'geth';
+        options.webpackConfigName = options.pipeline || 'development';
         options.contract = contract;
         options.framework = options.framework || 'react';
-        options.env = environment;
+        options.overwrite = options.overwrite || false;
+
         embark.scaffold(options);
       });
   }

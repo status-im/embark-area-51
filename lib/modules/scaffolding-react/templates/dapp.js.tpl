@@ -1,13 +1,13 @@
 import EmbarkJS from 'Embark/EmbarkJS';
 import {{contractName}} from 'Embark/contracts/{{contractName}}';
 
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { FormGroup, ControlLabel, FormControl, Checkbox, Button, Alert, InputGroup } from 'react-bootstrap';
 
 
 {{#each functions}}
-class {{capitalize name}}Form{{@index}} extends React.Component {
+class {{capitalize name}}Form{{@index}} extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -30,60 +30,62 @@ class {{capitalize name}}Form{{@index}} extends React.Component {
     }
 
     handleChange(e, name){
-        this.state.input[name] = e.target.value;
-        this.setState(this.state);
+        const {input} = this.state;
+        input[name] = e.target.value;
+        this.setState({input});
     }
 
     handleCheckbox(e, name){
-        this.state.input[name] = e.target.checked;
-        this.setState(this.state);
+        const {input} = this.state;
+        input[name] = e.target.checked;
+        this.setState({input});
     }
 
     async handleClick(e){
         e.preventDefault();
+
+        const {input, value} = this.state;
+
         this.setState({output: null, error: null, receipt: null});
-        
+
         try {
         {{#ifview stateMutability}}
-            {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}this.state.input.{{name}}{{#unless @last}}, {{/unless}}{{/each}})
-                .call()
-                .then((result) => {
+            const result = await {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{name}}{{#unless @last}}, {{/unless}}{{/each}}).call()
             {{#iflengthgt outputs 1}}
-                    this.setState({output: {
+            this.setState({output: {
             {{#each outputs}}
-                        {{emptyname name @index}}: result[{{@index}}]{{#unless @last}},{{/unless}}
+                {{emptyname name @index}}: result[{{@index}}]{{#unless @last}},{{/unless}}
             {{/each}}
-                    }}); 
+            }}); 
             {{else}}
-                    this.setState({output: result});  
-            {{/iflengthgt}} 
-                    })
-                .catch((err) => {
-                    this.setState({error: err.message});
-                });
+            this.setState({output: result});  
+            {{/iflengthgt}}           
         {{else}}
-            {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}this.state.input.{{name}}{{#unless @last}}, {{/unless}}{{/each}})
-                .send({
-                    {{#if payable}}
-                    value: this.state.value,
-                    {{/if}}
-                    from: web3.eth.defaultAccount
-                })
-                .then((_receipt) => {
-                    console.log(_receipt);
-                    this.setState({receipt: _receipt})
-                    })
-                .catch((err) => {
-                    console.log(err);
-                    this.setState({error: err.message});
-                });
+            const toSend = {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{name}}{{#unless @last}}, {{/unless}}{{/each}});
+
+            const estimatedGas = await toSend.estimateGas({from: web3.eth.defaultAccount});
+            
+            const receipt = await toSend.send({
+                {{#if payable}}
+                value: value,
+                {{/if}}
+                from: web3.eth.defaultAccount,
+                gasLimit: estimatedGas
+            });
+
+            console.log(receipt);
+
+            this.setState({receipt});
         {{/ifview}}
         } catch(err) {
+            console.error(err);
             this.setState({error: err.message});
         }
     }
 
     render(){
+        const {input, value, error, output, receipt} = this.state;
+
         return <div className="formSection">
             <h3>{{name}}</h3>
             <form>
@@ -98,7 +100,7 @@ class {{capitalize name}}Form{{@index}} extends React.Component {
                     {{else}}
                     <FormControl
                         type="text"
-                        defaultValue={ this.state.input.{{name}} }
+                        defaultValue={ input.{{name}} }
                         placeholder="{{type}}"
                         onChange={(e) => this.handleChange(e, '{{name}}')}
                     />
@@ -113,7 +115,7 @@ class {{capitalize name}}Form{{@index}} extends React.Component {
                         <InputGroup.Addon>Ξ</InputGroup.Addon>
                         <FormControl 
                             type="text"
-                            defaultValue={ this.state.value }
+                            defaultValue={ value }
                             placeholder="{{type}}"
                             onChange={(e) => { this.setState({value: e.target.value}); }}
                         />
@@ -121,37 +123,34 @@ class {{capitalize name}}Form{{@index}} extends React.Component {
                     </InputGroup>
                 </FormGroup>
             {{/if}}
-            {
-                this.state.error != null ?
-                <Alert bsStyle="danger">{this.state.error}</Alert>
-                : ''
-            }
+
+                { error != null && <Alert bsStyle="danger">{error}</Alert> }
+
             {{#ifview stateMutability}}
                 <Button type="submit" bsStyle="primary" onClick={(e) => this.handleClick(e)}>Call</Button>
                 {
-                    this.state.output != null ?
-                    <React.Fragment>
+                    output &&
+                    <Fragment>
                         <h4>Results</h4>
                         {{#iflengthgt outputs 1}}
                         <ul>
                         {{#each outputs}}
-                            <li>{{emptyname name @index}}: { this.state.output.{{emptyname name @index}} }</li>
+                            <li>{{emptyname name @index}}: { output.{{emptyname name @index}} }</li>
                         {{/each}}
                         </ul>
                         {{else}}
-                        {this.state.output.toString()}
+                        {output.toString()}
                         {{/iflengthgt}}
-                    </React.Fragment>
-                    : ''
+                    </Fragment>
                 }
             {{else}}
                 <Button type="submit" bsStyle="primary" onClick={(e) => this.handleClick(e)}>Send</Button>
                 {
-                this.state.receipt != null ?
-                <React.Fragment>
-                    <Alert bsStyle={this.state.receipt.status == "0x1" ? 'success' : 'danger'}>{this.state.receipt.status == "0x1" ? 'Success' : 'Failure / Revert'} - Transaction Hash: {this.state.receipt.transactionHash}</Alert>
-                </React.Fragment>
-                : ''
+                receipt &&
+                <Fragment>
+                    <Alert bsStyle={receipt.status == "0x1" ? 'success' : 'danger'}>{receipt.status == "0x1" ? 'Success' : 'Failure / Revert'} - Transaction Hash: {receipt.transactionHash}</Alert>
+                </Fragment>
+                
                 }
             {{/ifview}}
             </form>
@@ -161,45 +160,14 @@ class {{capitalize name}}Form{{@index}} extends React.Component {
 
 {{/each}}
 
-
-class {{contractName}}UI extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-        };
-    }
-
-    render(){
-        return (<div>
+function {{contractName}}UI(props) {
+    return (<div>
+            <h1>{{title}}</h1>
             {{#each functions}}
             <{{capitalize name}}Form{{@index}} />
             {{/each}}
         </div>);
-    }
 }
 
 
-class {{contractName}}UI extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-        };
-    }
-
-    render(){
-        return (<div>
-            {{#each functions}}
-            <{{capitalize name}}_{{@index}}_Form />
-            {{/each}}
-        </div>);
-    }
-}
-
-
-ReactDOM.render(<div>
-        <h1>{{title}}</h1>
-        <{{contractName}}UI />
-    </div>,
-    document.getElementById('app')
-);
-
+ReactDOM.render(<{{contractName}}UI />, document.getElementById('app'));

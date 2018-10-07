@@ -435,6 +435,54 @@ class EmbarkController {
     console.log(`${dappConfig}`.green);
   }
 
+  scaffold(options) {
+
+    this.context = options.context || [constants.contexts.scaffold];
+    options.onlyCompile = true;
+
+    const Engine = require('../lib/core/engine.js');
+    const engine = new Engine({
+      env: options.env,
+      version: this.version,
+      embarkConfig: options.embarkConfig || 'embark.json',
+      logFile: options.logFile,
+      context: this.context
+    });
+
+
+    async.waterfall([
+      function (callback) {
+        engine.init({}, callback);
+      },
+      function (callback) {
+        let pluginList = engine.plugins.listPlugins();
+        if (pluginList.length > 0) {
+          engine.logger.info(__("loaded plugins") + ": " + pluginList.join(", "));
+        }
+
+        engine.startService("processManager");
+        engine.startService("serviceMonitor");
+        engine.startService("libraryManager");
+        engine.startService("pipeline");
+        engine.startService("deployment", {onlyCompile: true});
+        engine.startService("web3");
+        engine.startService("scaffolding");
+
+        engine.events.request('deploy:contracts', callback);
+      }
+    ], (err) => {
+      if (err) {
+        engine.logger.error(err.message);
+        engine.logger.info(err.stack);
+      } else {
+        engine.events.request("scaffolding:generate", options, () => {
+          engine.logger.info(__("finished generating the UI").underline);
+          process.exit();
+        });
+      }
+    });
+  }
+
   upload(options) {
     this.context = options.context || [constants.contexts.upload, constants.contexts.build];
 
@@ -458,7 +506,7 @@ class EmbarkController {
 
 
     let platform;
-
+    
     async.waterfall([
       function initEngine(callback) {
         engine.init({}, () => {
