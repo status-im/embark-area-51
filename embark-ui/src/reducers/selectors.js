@@ -156,3 +156,11 @@ export function getFiles(state) {
 export function getCurrentFile(state) {
   return last(state.entities.currentFiles);
 }
+
+export function getBaseEther(state) {
+  return state.baseEther;
+}
+
+export function getTabs(state) {
+  return state.tabs;
+}
