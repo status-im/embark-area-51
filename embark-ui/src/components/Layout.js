@@ -21,7 +21,6 @@ import logo from '../images/logo.png';
 
 const sidebarNavItems = {items: [
   {name: "Dashboard", url: "/embark", icon: 'fa fa-tachometer'},
-  {name: "Contracts", url: "/embark/contracts", icon: "fa fa-file-text"},
   {name: "Explorer", url: "/embark/explorer/accounts", icon: "fa fa-signal", children: [
     {url: "/embark/explorer/accounts", icon: "fa fa-users", name: "Accounts"},
     {url: "/embark/explorer/blocks", icon: "fa fa-stop", name: "Blocks"},
@@ -65,7 +64,7 @@ const Layout = ({children, logout, credentials, location}) => (
         <AppSidebarMinimizer />
       </AppSidebar>
       <main className="main">
-        <Container fluid>
+        <Container fluid className="h-100">
           {children}
         </Container>
       </main>
