@@ -1,0 +1,15 @@
+.app-body {
+  overflow-x: unset;
+}
+
+.card.card-fullscreen {
+  z-index: 6;
+}
+
+.card.warnings-card, .card.errors-card {
+  text-transform: capitalize;
+}
+
+.card.warnings-card .card-options a, .card.errors-card .card-options a {
+  cursor: pointer;
+}
