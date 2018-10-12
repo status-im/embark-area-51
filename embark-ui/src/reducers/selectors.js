@@ -44,10 +44,6 @@ export function getBlock(state, number) {
   return state.entities.blocks.find((block) => block.number.toString() === number);
 }
 
-export function getCommands(state) {
-  return state.entities.commands;
-}
-
 export function getProcesses(state) {
   return state.entities.processes;
 }

@@ -46,5 +46,8 @@
   "storage": {
     "init": "init",
     "initiated": "initiated"
+  },
+  "logs": {
+    "logPath": ".embark/logs/"
   }
 }

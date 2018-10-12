@@ -10,6 +10,10 @@ class EmbarkController {
   constructor(options) {
     this.version = version;
     this.options = options || {};
+
+    // set a default context. should be overwritten by an action
+    // method before being used
+    this.context = {};
   }
 
   initConfig(env, options) {
@@ -18,7 +22,7 @@ class EmbarkController {
     let Config = require('../lib/core/config.js');
 
     this.events = new Events();
-    this.logger = new Logger({logLevel: 'debug', events: this.events});
+    this.logger = new Logger({logLevel: 'debug', events: this.events, context: this.context});
 
     this.config = new Config({env: env, logger: this.logger, events: this.events, context: this.context});
     this.config.loadConfigFiles(options);
@@ -125,6 +129,8 @@ class EmbarkController {
         }
 
         engine.startService("processManager");
+        engine.startService("coreProcess");
+        engine.startService("loggerApi");
         engine.startService("serviceMonitor");
         engine.startService("libraryManager");
         engine.startService("codeRunner");

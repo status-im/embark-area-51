@@ -1,3 +1,5 @@
+import {EMBARK_PROCESS_NAME} from '../constants';
+
 export const REQUEST = 'REQUEST';
 export const SUCCESS = 'SUCCESS';
 export const FAILURE = 'FAILURE';
@@ -92,8 +94,14 @@ export const processes = {
 
 export const COMMANDS = createRequestTypes('COMMANDS');
 export const commands = {
-  post: (command) => action(COMMANDS[REQUEST], {command, noLoading: true}),
-  success: (command) => action(COMMANDS[SUCCESS], {commands: [{timestamp: new Date().getTime(), ...command}]}),
+  post: (command) => action(COMMANDS[REQUEST], {command}),
+  success: (command, payload) => {
+    return action(COMMANDS[SUCCESS], {processLogs: [{
+      timestamp: new Date().getTime(),
+      name: EMBARK_PROCESS_NAME,
+      msg: `${payload.command} > ${command.result}`
+    }]})
+  },
   failure: (error) => action(COMMANDS[FAILURE], {error})
 };
 
@@ -141,7 +149,7 @@ export const contractFile = {
 
 export const CONTRACT_FUNCTION = createRequestTypes('CONTRACT_FUNCTION');
 export const contractFunction = {
-  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs, gasPrice, noLoading: true}),
+  post: (contractName, method, inputs, gasPrice) => action(CONTRACT_FUNCTION[REQUEST], {contractName, method, inputs, gasPrice}),
   success: (result, payload) => action(CONTRACT_FUNCTION[SUCCESS], {contractFunctions: [{...result, ...payload}]}),
   failure: (error) => action(CONTRACT_FUNCTION[FAILURE], {error})
 };

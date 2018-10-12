@@ -6,14 +6,6 @@ import Convert from 'ansi-to-html';
 
 const convert = new Convert();
 
-const CommandResult = ({result}) => (
-  <p className="text__new-line">{result}</p>
-);
-
-CommandResult.propTypes = {
-  result: PropTypes.string
-};
-
 class Console extends Component {
   constructor(props) {
     super(props);
@@ -32,24 +24,20 @@ class Console extends Component {
   }
 
   renderTabs() {
-    const {processLogs, processes, commands} = this.props;
-    return [
-      (<Tab title="Embark" key="Embark">
-        <Logs>
-          {commands.map((command, index) => <CommandResult key={index} result={command.result}/>)}
-        </Logs>
-      </Tab>)
-    ].concat(processes.map(process => (
+    const {processLogs, processes} = this.props;
+    return processes.map(process => (
       <Tab title={process.name} key={process.name}>
         <Logs>
           {
-            processLogs.reverse().filter((item) => item.name === process.name)
+            processLogs
+              .filter((item) => item.name === process.name)
+              .reverse()
               .map((item, i) => <p key={i} className={item.logLevel}
-                                   dangerouslySetInnerHTML={{__html: convert.toHtml(item.msg)}}></p>)
+                                  dangerouslySetInnerHTML={{__html: convert.toHtml(item.msg)}}></p>)
           }
         </Logs>
       </Tab>
-    )));
+    ));
   }
 
   render() {
@@ -91,7 +79,6 @@ class Console extends Component {
 Console.propTypes = {
   postCommand: PropTypes.func,
   isEmbark: PropTypes.func,
-  commands: PropTypes.arrayOf(PropTypes.object).isRequired,
   processes: PropTypes.arrayOf(PropTypes.object).isRequired,
   processLogs: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateTab: PropTypes.func
