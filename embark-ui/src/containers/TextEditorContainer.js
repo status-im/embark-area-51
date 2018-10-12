@@ -16,7 +16,7 @@ import {
   contractDeploy as postContractDeploy,
   toggleBreakpoint,
 } from '../actions';
-import {getCurrentFile, getContractCompile, getContractDeploys, getBreakpointsByFilename} from '../reducers/selectors';
+import {getCurrentFile, getContractCompile, getContractDeploys, getBreakpointsByFilename, getDebuggerLine} from '../reducers/selectors';
 
 class TextEditorContainer extends Component {
   constructor(props) {
@@ -102,6 +102,7 @@ class TextEditorContainer extends Component {
       <TextEditor file={this.state.currentFile}
                   contractCompile={this.props.contractCompile}
                   breakpoints={this.props.breakpoints}
+                  debuggerLine={this.props.debuggerLine}
                   toggleBreakpoint={this.props.toggleBreakpoint}
                   onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
     );
@@ -118,6 +119,7 @@ function mapStateToProps(state, props) {
     compilingContract: state.compilingContract,
     loading: state.loading,
     error: state.errorMessage,
+    debuggerLine: getDebuggerLine(state),
     currentFile,
     contractCompile,
     contractDeploys,
@@ -141,6 +143,7 @@ TextEditorContainer.propTypes = {
   error: PropTypes.string,
   toggleBreakpoints: PropTypes.func,
   breakpoints: PropTypes.array,
+  toggleBreakpoint: PropTypes.object
 };
 
 export default connect(
@@ -152,6 +155,6 @@ export default connect(
     removeFile: removeFileAction.request,
     postContractDeploy: postContractDeploy.post,
     compileContract: contractCompileAction.post,
-    toggleBreakpoint,
+    toggleBreakpoint: toggleBreakpoint.request
   },
 )(TextEditorContainer);
