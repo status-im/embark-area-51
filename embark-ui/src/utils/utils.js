@@ -1,3 +1,5 @@
+const Convert = require('ansi-to-html');
+
 export function last(array) {
   return array && array.length ? array[array.length - 1] : undefined;
 }
@@ -11,4 +13,9 @@ export function hashCode(str) {
     hash = hash & hash; // Convert to 32bit integer
   }
   return hash;
+}
+
+export function ansiToHtml(text) {
+  const convert = new Convert();
+  return convert.toHtml(text.replace(/\n/g,'<br>'))
 }
