@@ -352,7 +352,7 @@ export function listenToGasOracle(){
 export function stopGasOracle(){
   return {
     type: STOP_GAS_ORACLE
-  }
+  };
 }
 
 // Actions without Side Effect
