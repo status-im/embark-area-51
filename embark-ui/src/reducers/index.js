@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 import {REQUEST, SUCCESS, FAILURE, CONTRACT_COMPILE, FILES, LOGOUT, AUTHENTICATE,
-        FETCH_CREDENTIALS, UPDATE_BASE_ETHER} from "../actions";
-import {EMBARK_PROCESS_NAME} from '../constants';
+        FETCH_CREDENTIALS, UPDATE_BASE_ETHER, CHANGE_THEME, FETCH_THEME} from "../actions";
+import {EMBARK_PROCESS_NAME, DARK_THEME} from '../constants';
 
 const BN_FACTOR = 10000;
 const VOID_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -86,7 +86,7 @@ const filtrer = {
   },
   processLogs: function(processLog, index, self) {
     if (processLog.id !== undefined) {
-      return index === self.findIndex((p) => p.id === processLog.id) && index <= MAX_ELEMENTS
+      return index === self.findIndex((p) => p.id === processLog.id) && index <= MAX_ELEMENTS;
     }
     return true;
   },
@@ -223,6 +223,13 @@ function baseEther(state = '1', action) {
   return state;
 }
 
+function theme(state=DARK_THEME, action) {
+  if (action.type === CHANGE_THEME[REQUEST] || (action.type === FETCH_THEME[SUCCESS] && action.theme)) {
+    return action.theme;
+  }
+  return state;
+}
+
 const rootReducer = combineReducers({
   entities,
   loading,
@@ -230,7 +237,8 @@ const rootReducer = combineReducers({
   errorMessage,
   errorEntities,
   credentials,
-  baseEther
+  baseEther,
+  theme
 });
 
 export default rootReducer;

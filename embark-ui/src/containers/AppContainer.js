@@ -10,10 +10,14 @@ import {
   authenticate, fetchCredentials, logout,
   processes as processesAction,
   versions as versionsAction,
-  plugins as pluginsAction
+  plugins as pluginsAction,
+  changeTheme, fetchTheme
 } from '../actions';
 
-import { getCredentials, getAuthenticationError, getVersions } from '../reducers/selectors';
+
+import {LIGHT_THEME, DARK_THEME} from '../constants';
+
+import { getCredentials, getAuthenticationError, getVersions, getTheme } from '../reducers/selectors';
 
 const qs = require('qs');
 
@@ -38,6 +42,7 @@ class AppContainer extends Component {
 
   componentDidMount() {
     this.props.fetchCredentials();
+    this.props.fetchTheme();
   }
 
   requireAuthentication() {
@@ -59,18 +64,30 @@ class AppContainer extends Component {
     return this.props.authenticationError || !this.props.credentials.authenticated;
   }
 
+  toggleTheme() {
+    if (this.props.theme === LIGHT_THEME) {
+      this.props.changeTheme(DARK_THEME);
+    } else {
+      this.props.changeTheme(LIGHT_THEME);
+    }
+  }
+
   render() {
+    let content;
+    if (this.shouldRenderLogin()) {
+      content = <Login credentials={this.props.credentials} authenticate={this.props.authenticate} error={this.props.authenticationError} />;
+    } else {
+      content = <Layout location={this.props.location} logout={this.props.logout} credentials={this.props.credentials}
+                        toggleTheme={() => this.toggleTheme()} currentTheme={this.props.theme}>
+        <React.Fragment>{routes}</React.Fragment>
+      </Layout>;
+    }
+
     return (
-      <React.Fragment>
-        {this.shouldRenderLogin() ?
-          <Login credentials={this.props.credentials} authenticate={this.props.authenticate} error={this.props.authenticationError} />
-          :
-          <Layout location={this.props.location} logout={this.props.logout} credentials={this.props.credentials}>
-            <React.Fragment>{routes}</React.Fragment>
-          </Layout>
-        }
-      </React.Fragment>
-    )
+      <div className={(this.props.theme) + "-theme"}>
+        {content}
+      </div>
+    );
   }
 }
 
@@ -85,14 +102,18 @@ AppContainer.propTypes = {
   fetchProcesses: PropTypes.func,
   fetchPlugins: PropTypes.func,
   fetchVersions: PropTypes.func,
-  location: PropTypes.object
+  location: PropTypes.object,
+  theme: PropTypes.string,
+  changeTheme: PropTypes.func,
+  fetchTheme: PropTypes.func
 };
 
 function mapStateToProps(state) {
   return {
     initialized: getVersions(state).length > 0,
     credentials: getCredentials(state),
-    authenticationError: getAuthenticationError(state)
+    authenticationError: getAuthenticationError(state),
+    theme: getTheme(state)
   };
 }
 
@@ -104,6 +125,8 @@ export default withRouter(connect(
     fetchCredentials: fetchCredentials.request,
     fetchProcesses: processesAction.request,
     fetchVersions: versionsAction.request,
-    fetchPlugins: pluginsAction.request
+    fetchPlugins: pluginsAction.request,
+    changeTheme: changeTheme.request,
+    fetchTheme: fetchTheme.request
   },
 )(AppContainer));

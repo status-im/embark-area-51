@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DropdownItem, DropdownMenu, DropdownToggle, Nav, Container } from 'reactstrap';
+import {LIGHT_THEME, DARK_THEME} from '../constants';
+import FontAwesome from 'react-fontawesome';
 
 import {
   AppAside,
@@ -26,7 +28,7 @@ const sidebarNavItems = {items: [
   {name: "Explorer", url: "/embark/explorer/accounts", icon: "fa fa-signal", children: [
     {url: "/embark/explorer/accounts", icon: "fa fa-users", name: "Accounts"},
     {url: "/embark/explorer/blocks", icon: "fa fa-stop", name: "Blocks"},
-    {url: "/embark/explorer/transactions", icon: "fa fa-tree", name: "Transactions"},
+    {url: "/embark/explorer/transactions", icon: "fa fa-tree", name: "Transactions"}
   ]},
   {name: "Fiddle", url: "/embark/fiddle", icon: "fa fa-codepen"},
   {name: "Documentation", url: "/embark/documentation", icon: "fa fa-book"},
@@ -34,10 +36,10 @@ const sidebarNavItems = {items: [
     {url: "/embark/utilities/converter", icon: "fa fa-plug", name: "Converter"},
     {url: "/embark/utilities/communication", icon: "fa fa-phone", name: "Communication"},
     {url: "/embark/utilities/ens", icon: "fa fa-circle", name: "ENS"}
-  ]},
+  ]}
 ]};
 
-const Layout = ({children, logout, credentials, location}) => (
+const Layout = ({children, logout, credentials, location, toggleTheme, currentTheme}) => (
   <div className="app">
     <AppHeader fixed>
       <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -52,7 +54,11 @@ const Layout = ({children, logout, credentials, location}) => (
             <i className="fa fa-user fa-3x" />
           </DropdownToggle>
           <DropdownMenu right style={{ right: 'auto' }}>
-            <DropdownItem onClick={logout}><i className="fa fa-lock"></i> Logout</DropdownItem>
+            <DropdownItem className="text-capitalize" onClick={() => toggleTheme()}>
+              <FontAwesome name={currentTheme === DARK_THEME ? 'sun-o' : 'moon-o'} />
+              {currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME} Mode
+            </DropdownItem>
+            <DropdownItem onClick={logout}><FontAwesome name="lock" /> Logout</DropdownItem>
           </DropdownMenu>
         </AppHeaderDropdown>
       </Nav>
@@ -74,6 +80,7 @@ const Layout = ({children, logout, credentials, location}) => (
       </AppAside>
     </div>
     <AppFooter>
+
       <span className="ml-auto">
         Embark&nbsp;
         <a href="https://embark.status.im" title="Documentation" rel="noopener noreferrer" target="_blank">Documentation</a>
@@ -88,7 +95,10 @@ Layout.propTypes = {
   children: PropTypes.element,
   tabs: PropTypes.arrayOf(PropTypes.object),
   credentials: PropTypes.object,
-  logout: PropTypes.func
+  location: PropTypes.object,
+  logout: PropTypes.func,
+  toggleTheme: PropTypes.func,
+  currentTheme: PropTypes.string
 };
 
 export default Layout;
