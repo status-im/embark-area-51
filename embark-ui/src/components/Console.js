@@ -5,6 +5,7 @@ import Convert from 'ansi-to-html';
 import { Col, Row, Card, CardBody, CardFooter, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 import {AsyncTypeahead} from 'react-bootstrap-typeahead'
+import ReactJson from 'react-json-view';
 
 import Logs from "./Logs";
 import "./Console.css";
@@ -56,6 +57,15 @@ class Console extends Component {
     )
   }
 
+  isJsonObject(item) {
+    if (!item.result) return false;
+    try {
+      return typeof(JSON.parse(item.result)) === 'object'
+    } catch(_err) {
+      return false;
+    }
+  }
+
   renderTabs() {
     const {processLogs, processes} = this.props;
 
@@ -67,8 +77,22 @@ class Console extends Component {
               {processLogs
                 .filter((item) => item.name === process.name)
                 .reverse()
-                .map((item, i) => <p key={i} className={item.logLevel}
-                                    dangerouslySetInnerHTML={{__html: convert.toHtml(item.msg)}}></p>)}
+                .map((item, i) => {
+
+                  if (this.isJsonObject(item)) {
+                    return(
+                      <div>
+                        <p key={i} className={item.logLevel} dangerouslySetInnerHTML={{__html: (convert.toHtml(item.command || ""))}}></p>
+                        <ReactJson src={JSON.parse(item.result)} theme="monokai" sortKeys={true} collapsed={1} />
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <p key={i} className={item.logLevel} dangerouslySetInnerHTML={{__html: (convert.toHtml(item.command || "") + convert.toHtml(item.msg))}}></p>
+                  )
+                })
+              }
             </Logs>
           </TabPane>
         ))}
