@@ -4,6 +4,7 @@ import * as storage from '../services/storage';
 import {eventChannel} from 'redux-saga';
 import {all, call, fork, put, takeLatest, takeEvery, take, select, race} from 'redux-saga/effects';
 import {getCredentials} from '../reducers/selectors';
+import {searchExplorer} from './searchSaga';
 
 function *doRequest(entity, serviceFn, payload) {
   payload.credentials = yield select(getCredentials);
@@ -53,6 +54,8 @@ export const saveCredentials = doRequest.bind(null, actions.saveCredentials, sto
 export const logout = doRequest.bind(null, actions.logout, storage.logout);
 export const changeTheme = doRequest.bind(null, actions.changeTheme, storage.changeTheme);
 export const fetchTheme = doRequest.bind(null, actions.fetchTheme, storage.fetchTheme);
+
+export const explorerSearch = searchExplorer.bind(null, actions.explorerSearch);
 
 
 export function *watchFetchTransaction() {
@@ -210,6 +213,10 @@ export function *watchFetchCredentials() {
 
 export function *watchLogout() {
   yield takeEvery(actions.LOGOUT[actions.REQUEST], logout);
+}
+
+export function *watchExplorerSearch() {
+  yield takeEvery(actions.EXPLORER_SEARCH[actions.REQUEST], explorerSearch);
 }
 
 function createChannel(socket) {
@@ -377,6 +384,7 @@ export default function *root() {
     fork(watchAuthenticate),
     fork(watchAuthenticateSuccess),
     fork(watchLogout),
+    fork(watchExplorerSearch),
     fork(watchFetchTheme),
     fork(watchChangeTheme),
     fork(watchListenGasOracle)
