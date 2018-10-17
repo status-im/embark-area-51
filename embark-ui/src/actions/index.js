@@ -351,6 +351,32 @@ export const web3EstimateGas = {
   failure: (error, payload) => action(WEB3_ESTIMAGE_GAS[FAILURE], {web3Error: error, contract: payload.contract})
 };
 
+export const START_DEBUG = createRequestTypes('START_DEBUG');
+export const startDebug = {
+  request: (txHash) => action(START_DEBUG[REQUEST], {txHash}),
+  success: () => action(START_DEBUG[SUCCESS]),
+  failure: (error) => action(START_DEBUG[FAILURE], {error})
+};
+
+export const DEBUG_NEXT = createRequestTypes('DEBUG_NEXT');
+export const debugNext = {
+  request: (steps) => action(DEBUG_NEXT[REQUEST], {steps}),
+  success: () => action(DEBUG_NEXT[SUCCESS]),
+  failure: (error) => action(DEBUG_NEXT[FAILURE], {error})
+};
+
+export const DEBUG_PREVIOUS = createRequestTypes('DEBUG_PREVIOUS');
+export const debugPrevious = {
+  request: (steps) => action(DEBUG_PREVIOUS[REQUEST], {steps}),
+  success: () => action(DEBUG_PREVIOUS[SUCCESS]),
+  failure: (error) => action(DEBUG_PREVIOUS[FAILURE], {error})
+};
+
+export const DEBUGGER_INFO = createRequestTypes('DEBUGGER_INFO');
+export const debuggerInfo = {
+  success: (data) => action(DEBUGGER_INFO[SUCCESS], {data})
+};
+
 // Web Socket
 export const WATCH_NEW_PROCESS_LOGS = 'WATCH_NEW_PROCESS_LOGS';
 export const STOP_NEW_PROCESS_LOGS = 'STOP_NEW_PROCESS_LOGS';
@@ -360,6 +386,7 @@ export const INIT_BLOCK_HEADER = 'INIT_BLOCK_HEADER';
 export const STOP_BLOCK_HEADER = 'STOP_BLOCK_HEADER';
 export const WATCH_GAS_ORACLE = 'WATCH_GAS_ORACLE';
 export const STOP_GAS_ORACLE = 'STOP_GAS_ORACLE';
+export const STOP_DEBUGGER = 'STOP_DEBUGGER';
 
 export function listenToProcessLogs(processName) {
   return {
@@ -409,6 +436,12 @@ export function stopGasOracle(){
   return {
     type: STOP_GAS_ORACLE
   };
+}
+
+export function stopDebugger(){
+  return {
+    type: STOP_DEBUGGER
+  }
 }
 
 // Actions without Side Effect

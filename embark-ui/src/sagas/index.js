@@ -69,6 +69,9 @@ export const fetchFile = doRequest.bind(null, actions.file, api.fetchFile);
 export const postFile = doRequest.bind(null, actions.saveFile, api.postFile);
 export const deleteFile = doRequest.bind(null, actions.removeFile, api.deleteFile);
 export const fetchEthGas = doRequest.bind(null, actions.gasOracle, api.getEthGasAPI);
+export const startDebug = doRequest.bind(null, actions.startDebug, api.startDebug);
+export const debugNext = doRequest.bind(null, actions.debugNext, api.debugNext);
+export const debugPrevious = doRequest.bind(null, actions.debugPrevious, api.debugPrevious);
 export const authenticate = doRequest.bind(null, actions.authenticate, api.authenticate);
 
 export const fetchCurrentFile = doRequest.bind(null, actions.currentFile, storage.fetchCurrentFile);
@@ -223,6 +226,18 @@ export function *watchPostCurrentFile() {
 
 export function *watchFetchEthGas() {
   yield takeEvery(actions.GAS_ORACLE[actions.REQUEST], fetchEthGas);
+}
+
+export function *watchStartDebug() {
+  yield takeEvery(actions.START_DEBUG[actions.REQUEST], startDebug);
+}
+
+export function *watchDebugNext() {
+  yield takeEvery(actions.DEBUG_NEXT[actions.REQUEST], debugNext);
+}
+
+export function *watchDebugPrevious() {
+  yield takeEvery(actions.DEBUG_PREVIOUS[actions.REQUEST], debugPrevious);
 }
 
 export function *watchAuthenticate() {
@@ -385,6 +400,28 @@ export function *watchListenGasOracle() {
   yield takeEvery(actions.WATCH_GAS_ORACLE, listenGasOracle);
 }
 
+export function *listenDebugger() {
+  const credentials = yield select(getCredentials);
+  const socket = api.listenToDebugger(credentials);
+  const channel = yield call(createChannel, socket);
+  while (true) {
+    const { cancel, debuggerInfo } = yield race({
+      debuggerInfo: take(channel),
+      cancel: take(actions.STOP_DEBUGGER)
+    });
+
+    if (cancel) {
+      channel.close();
+      return;
+    }
+    yield put(actions.debuggerInfo.success(debuggerInfo));
+  }
+}
+
+export function *watchListenDebugger() {
+  yield takeEvery(actions.START_DEBUG[actions.SUCCESS], listenDebugger);
+}
+
 export function *listenToMessages(action) {
   const credentials = yield select(getCredentials);
   const socket = api.listenToChannel(credentials, action.messageChannels[0]);
@@ -436,6 +473,9 @@ export default function *root() {
     fork(watchPostCurrentFile),
     fork(watchFetchCredentials),
     fork(watchFetchEthGas),
+    fork(watchStartDebug),
+    fork(watchDebugNext),
+    fork(watchDebugPrevious),
     fork(watchAuthenticate),
     fork(watchAuthenticateSuccess),
     fork(watchLogout),
@@ -447,6 +487,7 @@ export default function *root() {
     fork(watchVerifyMessage),
     fork(watchWeb3EstimateGas),
     fork(watchWeb3Deploy),
-    fork(watchUpdateDeploymentPipeline)
+    fork(watchUpdateDeploymentPipeline),
+    fork(watchListenDebugger)
   ]);
 }

@@ -185,6 +185,22 @@ export function verifyMessage(payload) {
   return post('/messages/verify', ...arguments);
 }
 
+export function startDebug(payload) {
+  return post('/debugger/start', {params: payload, credentials: payload.credentials});
+}
+
+export function debugNext(payload) {
+  return post('/debugger/next', {params: payload, credentials: payload.credentials});
+}
+
+export function debugPrevious(payload) {
+  return post('/debugger/previous', {params: payload, credentials: payload.credentials});
+}
+
+export function listenToDebugger(credentials) {
+  return new WebSocket(`ws://${credentials.host}/embark-api/debugger`, [credentials.token]);
+}
+
 export function listenToChannel(credentials, channel) {
   return new WebSocket(`ws://${credentials.host}/embark-api/communication/listenTo/${channel}`, [credentials.token]);
 }

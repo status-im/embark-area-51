@@ -224,3 +224,7 @@ export function getWeb3GasEstimates(state) {
 export function getWeb3Deployments(state) {
   return state.web3.deployments;
 }
+
+export function debuggerInfo(state) {
+  return state.debuggerInfo;
+}
