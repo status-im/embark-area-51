@@ -25,7 +25,8 @@ const sidebarNavItems = {items: [
   {name: "Dashboard", url: "/embark", icon: 'fa fa-tachometer'},
   {name: "Deployment", url: "/embark/deployment", icon: "fa fa-arrow-up"},
   {name: "Contracts", url: "/embark/contracts", icon: "fa fa-file-text"},
-  {name: "Explorer", url: "/embark/explorer/accounts", icon: "fa fa-signal", children: [
+  {name: "Explorer", url: "/embark/explorer", icon: "fa fa-compass", children: [
+    {url: "/embark/explorer/overview", icon: "fa fa-signal", name: "Overview"},
     {url: "/embark/explorer/accounts", icon: "fa fa-users", name: "Accounts"},
     {url: "/embark/explorer/blocks", icon: "fa fa-stop", name: "Blocks"},
     {url: "/embark/explorer/transactions", icon: "fa fa-tree", name: "Transactions"}
