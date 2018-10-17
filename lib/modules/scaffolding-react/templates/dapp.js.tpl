@@ -14,7 +14,7 @@ class {{capitalize name}}Form{{@index}} extends Component {
             {{#if inputs.length}}
             input: {
                 {{#each inputs}}
-                {{name}}: {{#ifeq type 'bool'}}false{{else}}''{{/ifeq}}{{#unless @last}},{{/unless}}
+                {{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}}: {{#ifeq type 'bool'}}false{{else}}''{{/ifeq}}{{#unless @last}},{{/unless}}
                 {{/each}}
             },
             {{/if}}
@@ -50,7 +50,7 @@ class {{capitalize name}}Form{{@index}} extends Component {
 
         try {
         {{#ifview stateMutability}}
-            const result = await {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{name}}{{#unless @last}}, {{/unless}}{{/each}}).call()
+            const result = await {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}}{{#unless @last}}, {{/unless}}{{/each}}).call()
             {{#iflengthgt outputs 1}}
             this.setState({output: {
             {{#each outputs}}
@@ -61,7 +61,13 @@ class {{capitalize name}}Form{{@index}} extends Component {
             this.setState({output: result});  
             {{/iflengthgt}}           
         {{else}}
-            const toSend = {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{name}}{{#unless @last}}, {{/unless}}{{/each}});
+            {{#each inputs}}
+            {{#ifarr type}}
+            input.{{trim name}} = input.{{trim name}}.split(',').map(x => trim(x.toString()));
+            {{/ifarr}}
+            {{/each}}
+
+            const toSend = {{../contractName}}.methods{{methodname ../functions name inputs}}({{#each inputs}}input.{{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}}{{#unless @last}}, {{/unless}}{{/each}});
 
             const estimatedGas = await toSend.estimateGas({from: web3.eth.defaultAccount});
             
@@ -92,17 +98,17 @@ class {{capitalize name}}Form{{@index}} extends Component {
             {{#if inputs.length}}
                 {{#each inputs}}
                 <FormGroup>
-                    <ControlLabel>{{name}}</ControlLabel>
+                    <ControlLabel>{{#ifeq name ''}}field{{else}}{{name}}{{/ifeq}}</ControlLabel>
                     {{#ifeq type 'bool'}}
                     <Checkbox
-                        onClick={(e) => this.handleCheckbox(e, '{{name}}')}
+                        onClick={(e) => this.handleCheckbox(e, '{{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}}')}
                     />
                     {{else}}
                     <FormControl
                         type="text"
-                        defaultValue={ input.{{name}} }
+                        defaultValue={ input.{{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}} }
                         placeholder="{{type}}"
-                        onChange={(e) => this.handleChange(e, '{{name}}')}
+                        onChange={(e) => this.handleChange(e, '{{#ifeq name ''}}field{{else}}{{trim name}}{{/ifeq}}')}
                     />
                     {{/ifeq}}
                 </FormGroup>
