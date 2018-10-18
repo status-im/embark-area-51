@@ -70,8 +70,12 @@ export const postFile = doRequest.bind(null, actions.saveFile, api.postFile);
 export const deleteFile = doRequest.bind(null, actions.removeFile, api.deleteFile);
 export const fetchEthGas = doRequest.bind(null, actions.gasOracle, api.getEthGasAPI);
 export const startDebug = doRequest.bind(null, actions.startDebug, api.startDebug);
-export const debugNext = doRequest.bind(null, actions.debugNext, api.debugNext);
-export const debugPrevious = doRequest.bind(null, actions.debugPrevious, api.debugPrevious);
+export const debugJumpBack = doRequest.bind(null, actions.debugJumpBack, api.debugJumpBack);
+export const debugJumpForward = doRequest.bind(null, actions.debugJumpForward, api.debugJumpForward);
+export const debugStepOverForward = doRequest.bind(null, actions.debugStepOverForward, api.debugStepOverForward);
+export const debugStepOverBackward = doRequest.bind(null, actions.debugStepOverBackward, api.debugStepOverBackward);
+export const debugStepIntoForward = doRequest.bind(null, actions.debugStepIntoForward, api.debugStepIntoForward);
+export const debugStepIntoBackward = doRequest.bind(null, actions.debugStepIntoBackward, api.debugStepIntoBackward);
 export const authenticate = doRequest.bind(null, actions.authenticate, api.authenticate);
 
 export const fetchCurrentFile = doRequest.bind(null, actions.currentFile, storage.fetchCurrentFile);
@@ -232,12 +236,28 @@ export function *watchStartDebug() {
   yield takeEvery(actions.START_DEBUG[actions.REQUEST], startDebug);
 }
 
-export function *watchDebugNext() {
-  yield takeEvery(actions.DEBUG_NEXT[actions.REQUEST], debugNext);
+export function *watchDebugJumpBack() {
+  yield takeEvery(actions.DEBUG_JUMP_BACK[actions.REQUEST], debugJumpBack);
 }
 
-export function *watchDebugPrevious() {
-  yield takeEvery(actions.DEBUG_PREVIOUS[actions.REQUEST], debugPrevious);
+export function *watchDebugJumpForward() {
+  yield takeEvery(actions.DEBUG_JUMP_FORWARD[actions.REQUEST], debugJumpForward);
+}
+
+export function *watchDebugStepOverForward() {
+  yield takeEvery(actions.DEBUG_STEP_OVER_FORWARD[actions.REQUEST], debugStepOverForward);
+}
+
+export function *watchDebugStepOverBackward() {
+  yield takeEvery(actions.DEBUG_STEP_OVER_BACKWARD[actions.REQUEST], debugStepOverBackward);
+}
+
+export function *watchDebugStepIntoForward() {
+  yield takeEvery(actions.DEBUG_STEP_INTO_FORWARD[actions.REQUEST], debugStepIntoForward);
+}
+
+export function *watchDebugStepIntoBackward() {
+  yield takeEvery(actions.DEBUG_STEP_INTO_BACKWARD[actions.REQUEST], debugStepIntoBackward);
 }
 
 export function *watchAuthenticate() {
@@ -474,8 +494,12 @@ export default function *root() {
     fork(watchFetchCredentials),
     fork(watchFetchEthGas),
     fork(watchStartDebug),
-    fork(watchDebugNext),
-    fork(watchDebugPrevious),
+    fork(watchDebugJumpBack),
+    fork(watchDebugJumpForward),
+    fork(watchDebugStepOverForward),
+    fork(watchDebugStepOverBackward),
+    fork(watchDebugStepIntoForward),
+    fork(watchDebugStepIntoBackward),
     fork(watchAuthenticate),
     fork(watchAuthenticateSuccess),
     fork(watchLogout),

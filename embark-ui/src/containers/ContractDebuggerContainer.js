@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {contractLogs as contractLogsAction, listenToContractLogs, startDebug, debugNext, debugPrevious} from '../actions';
+import {contractLogs as contractLogsAction, listenToContractLogs, startDebug, debugJumpBack, debugJumpForward, debugStepOverForward, debugStepOverBackward, debugStepIntoForward, debugStepIntoBackward} from '../actions';
 
 import ContractDebugger from '../components/ContractDebugger';
 import DataWrapper from "../components/DataWrapper";
@@ -18,7 +18,8 @@ class ContractDebuggerContainer extends Component {
   render() {
     return (
       <DataWrapper shouldRender={this.props.contractLogs !== undefined } {...this.props} render={() => (
-        <ContractDebugger contract={this.props.contract} startDebug={this.props.startDebug} debugNext={this.props.debugNext} debugPrevious={this.props.debugPrevious} debuggerInfo={this.props.debuggerInfo}  />
+        <ContractDebugger contract={this.props.contract} startDebug={this.props.startDebug} debugJumpBack={this.props.debugJumpBack} debugJumpForward={this.props.debugJumpForward} debugStepOverForward={this.props.debugStepOverForward} debugStepOverBackward={this.props.debugStepOverBackward} debugStepIntoForward={this.props.debugStepIntoForward} debugStepIntoBackward={this.props.debugStepIntoBackward} debuggerInfo={this.props.debuggerInfo}
+        />
       )} />
     );
   }
@@ -42,8 +43,12 @@ export default connect(
   mapStateToProps,
   {
     startDebug: startDebug.request,
-    debugNext: debugNext.request,
-    debugPrevious: debugPrevious.request
+    debugJumpBack: debugJumpBack.request,
+    debugJumpForward: debugJumpForward.request,
+    debugStepOverForward: debugStepOverForward.request,
+    debugStepOverBackward: debugStepOverBackward.request,
+    debugStepIntoForward: debugStepIntoForward.request,
+    debugStepIntoBackward: debugStepIntoBackward.request
   }
 )(ContractDebuggerContainer);
 

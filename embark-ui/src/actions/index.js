@@ -358,18 +358,46 @@ export const startDebug = {
   failure: (error) => action(START_DEBUG[FAILURE], {error})
 };
 
-export const DEBUG_NEXT = createRequestTypes('DEBUG_NEXT');
-export const debugNext = {
-  request: (steps) => action(DEBUG_NEXT[REQUEST], {steps}),
-  success: () => action(DEBUG_NEXT[SUCCESS]),
-  failure: (error) => action(DEBUG_NEXT[FAILURE], {error})
+export const DEBUG_JUMP_BACK = createRequestTypes('DEBUG_JUMP_BACK');
+export const debugJumpBack = {
+  request: () => action(DEBUG_JUMP_BACK[REQUEST], {}),
+  success: () => action(DEBUG_JUMP_BACK[SUCCESS]),
+  failure: (error) => action(DEBUG_JUMP_BACK[FAILURE], {error})
 };
 
-export const DEBUG_PREVIOUS = createRequestTypes('DEBUG_PREVIOUS');
-export const debugPrevious = {
-  request: (steps) => action(DEBUG_PREVIOUS[REQUEST], {steps}),
-  success: () => action(DEBUG_PREVIOUS[SUCCESS]),
-  failure: (error) => action(DEBUG_PREVIOUS[FAILURE], {error})
+export const DEBUG_JUMP_FORWARD = createRequestTypes('DEBUG_JUMP_FORWARD');
+export const debugJumpForward = {
+  request: () => action(DEBUG_JUMP_FORWARD[REQUEST], {}),
+  success: () => action(DEBUG_JUMP_FORWARD[SUCCESS]),
+  failure: (error) => action(DEBUG_JUMP_FORWARD[FAILURE], {error})
+};
+
+export const DEBUG_STEP_OVER_BACKWARD = createRequestTypes('DEBUG_STEP_OVER_BACKWARD');
+export const debugStepOverBackward = {
+  request: () => action(DEBUG_STEP_OVER_BACKWARD[REQUEST], {}),
+  success: () => action(DEBUG_STEP_OVER_BACKWARD[SUCCESS]),
+  failure: (error) => action(DEBUG_STEP_OVER_BACKWARD[FAILURE], {error})
+};
+
+export const DEBUG_STEP_OVER_FORWARD = createRequestTypes('DEBUG_STEP_OVER_FORWARD');
+export const debugStepOverForward = {
+  request: () => action(DEBUG_STEP_OVER_FORWARD[REQUEST], {}),
+  success: () => action(DEBUG_STEP_OVER_FORWARD[SUCCESS]),
+  failure: (error) => action(DEBUG_STEP_OVER_FORWARD[FAILURE], {error})
+};
+
+export const DEBUG_STEP_INTO_BACKWARD = createRequestTypes('DEBUG_STEP_INTO_BACKWARD');
+export const debugStepIntoBackward = {
+  request: () => action(DEBUG_STEP_INTO_BACKWARD[REQUEST], {}),
+  success: () => action(DEBUG_STEP_INTO_BACKWARD[SUCCESS]),
+  failure: (error) => action(DEBUG_STEP_INTO_BACKWARD[FAILURE], {error})
+};
+
+export const DEBUG_STEP_INTO_FORWARD = createRequestTypes('DEBUG_STEP_INTO_FORWARD');
+export const debugStepIntoForward = {
+  request: () => action(DEBUG_STEP_INTO_FORWARD[REQUEST], {}),
+  success: () => action(DEBUG_STEP_INTO_FORWARD[SUCCESS]),
+  failure: (error) => action(DEBUG_STEP_INTO_FORWARD[FAILURE], {error})
 };
 
 export const DEBUGGER_INFO = createRequestTypes('DEBUGGER_INFO');

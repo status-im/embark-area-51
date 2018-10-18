@@ -189,12 +189,28 @@ export function startDebug(payload) {
   return post('/debugger/start', {params: payload, credentials: payload.credentials});
 }
 
-export function debugNext(payload) {
-  return post('/debugger/next', {params: payload, credentials: payload.credentials});
+export function debugJumpBack(payload) {
+  return post('/debugger/jumpBack', {params: payload, credentials: payload.credentials});
 }
 
-export function debugPrevious(payload) {
-  return post('/debugger/previous', {params: payload, credentials: payload.credentials});
+export function debugJumpForward(payload) {
+  return post('/debugger/jumpForward', {params: payload, credentials: payload.credentials});
+}
+
+export function debugStepOverForward(payload) {
+  return post('/debugger/stepOverForward', {params: payload, credentials: payload.credentials});
+}
+
+export function debugStepOverBackward(payload) {
+  return post('/debugger/stepOverBackward', {params: payload, credentials: payload.credentials});
+}
+
+export function debugStepIntoForward(payload) {
+  return post('/debugger/stepIntoForward', {params: payload, credentials: payload.credentials});
+}
+
+export function debugStepIntoBackward(payload) {
+  return post('/debugger/stepIntoBackward', {params: payload, credentials: payload.credentials});
 }
 
 export function listenToDebugger(credentials) {
