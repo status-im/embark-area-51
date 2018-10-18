@@ -1,38 +1,43 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {Row, Col, Table} from 'reactstrap';
+import {Row, Col, Card, CardHeader, CardTitle, CardBody} from 'reactstrap';
 import PropTypes from 'prop-types';
+
+import CardTitleIdenticon from './CardTitleIdenticon';
 
 const Transactions = ({transactions}) => (
   <Row>
     <Col>
       <h1>Transactions</h1>
-      <Table responsive className="text-nowrap">
-        <thead>
-          <tr>
-            <th>Hash</th>
-            <th>Block Number</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-      <tbody>
-        {
-          transactions.map((transaction) => {
-            return (
-              <tr key={transaction.hash}>
-                <td><Link to={`/embark/explorer/transactions/${transaction.hash}`}>{transaction.hash}</Link></td>
-                <td>{transaction.blockNumber}</td>
-                <td>{transaction.from}</td>
-                <td>{transaction.to}</td>
-                <td>{transaction.to ? "Contract Call" : "Contract Creation"}</td>
-              </tr>
-            );
-          })
-        }
-      </tbody>
-    </Table>
+      {transactions.map(transaction => (
+        <Card>
+          <CardHeader>
+            <Link to={`/embark/explorer/transactions/${transaction.hash}`}>
+              <CardTitleIdenticon id={transaction.hash}>Transaction {transaction.hash}</CardTitleIdenticon>
+            </Link>
+          </CardHeader>
+          <CardBody>
+            <Row>
+              <Col>
+                <strong>Block number</strong>
+                <div>{transaction.blockNumber}</div>
+              </Col>
+              <Col>
+                <strong>From</strong>
+                <div>{transaction.from}</div>
+              </Col>
+              <Col>
+                <strong>To</strong>
+                <div>{transaction.to}</div>
+              </Col>
+              <Col>
+                <strong>Type</strong>
+                <div>{transaction.to ? "Contract Call" : "Contract Creation"}</div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      ))}
     </Col>
   </Row>
 );
