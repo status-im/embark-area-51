@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DropdownItem, DropdownMenu, DropdownToggle, Nav, Container } from 'reactstrap';
+import { DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Container } from 'reactstrap';
 import {LIGHT_THEME, DARK_THEME} from '../constants';
 import FontAwesome from 'react-fontawesome';
 
@@ -19,7 +19,9 @@ import {
   AppHeaderDropdown
 } from '@coreui/react';
 
-import logo from '../images/logo.png';
+import SearchBar from './SearchBar';
+
+import logo from '../images/logo-new.svg';
 
 const sidebarNavItems = {items: [
   {name: "Dashboard", url: "/embark", icon: 'fa fa-tachometer'},
@@ -31,7 +33,7 @@ const sidebarNavItems = {items: [
     {url: "/embark/explorer/blocks", icon: "fa fa-stop", name: "Blocks"},
     {url: "/embark/explorer/transactions", icon: "fa fa-tree", name: "Transactions"}
   ]},
-  {name: "Fiddle", url: "/embark/fiddle", icon: "fa fa-codepen"},
+  {name: "Editor", url: "/embark/editor", icon: "fa fa-codepen"},
   {name: "Documentation", url: "/embark/documentation", icon: "fa fa-book"},
   {name: "Utils", url: "/embark/utilities/converter", icon: "fa fa-cog", children: [
     {url: "/embark/utilities/converter", icon: "fa fa-plug", name: "Converter"},
@@ -41,8 +43,12 @@ const sidebarNavItems = {items: [
   ]}
 ]};
 
+function searchTheExplorer(value) {
+  // TODO: search
+}
+
 const Layout = ({children, logout, credentials, location, toggleTheme, currentTheme}) => (
-  <div className="app">
+  <div className="app animated fadeIn">
     <AppHeader fixed>
       <AppSidebarToggler className="d-lg-none" display="md" mobile />
       <AppNavbarBrand
@@ -50,10 +56,23 @@ const Layout = ({children, logout, credentials, location, toggleTheme, currentTh
         minimized={{ src: logo, width: 30, height: 30, alt: 'Embark Logo' }}
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
+      <Nav className="d-md-down-none" navbar>
+        {sidebarNavItems.items.map((item) => {
+          return (
+            <NavItem className="px-3">
+              <NavLink href={item.url}>
+                <i className={item.icon}>&nbsp;</i>
+                {item.name}
+              </NavLink>
+            </NavItem>
+          )
+        })}
+      </Nav>
       <Nav className="ml-auto" navbar>
+        <SearchBar searchSubmit={searchValue => searchTheExplorer(searchValue)}/>
         <AppHeaderDropdown direction="down">
           <DropdownToggle nav>
-            <i className="fa fa-user fa-3x" />
+            <i className="icon-settings" />
           </DropdownToggle>
           <DropdownMenu right style={{ right: 'auto' }}>
             <DropdownItem className="text-capitalize" onClick={() => toggleTheme()}>
@@ -74,7 +93,7 @@ const Layout = ({children, logout, credentials, location, toggleTheme, currentTh
         <AppSidebarMinimizer />
       </AppSidebar>
       <main className="main">
-        <Container fluid className="h-100">
+        <Container fluid className="h-100" style={{"margin-top": '24px'}}>
           {children}
         </Container>
       </main>
@@ -82,7 +101,6 @@ const Layout = ({children, logout, credentials, location, toggleTheme, currentTh
       </AppAside>
     </div>
     <AppFooter>
-
       <span className="ml-auto">
         Embark&nbsp;
         <a href="https://embark.status.im" title="Documentation" rel="noopener noreferrer" target="_blank">Documentation</a>

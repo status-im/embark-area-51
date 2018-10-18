@@ -14,6 +14,7 @@ const entitiesDefaultState = {
   blocks: [],
   transactions: [],
   processes: [],
+  services: [],
   processLogs: [],
   commandSuggestions: [],
   contracts: [],
@@ -84,6 +85,10 @@ const sorter = {
 
 const filtrer = {
   processes: function(process, index, self) {
+    if (["embark", "blockchain"].indexOf(process.name) === -1) return false;
+    return index === self.findIndex((t) => t.name === process.name);
+  },
+  services: function(process, index, self) {
     return index === self.findIndex((t) => t.name === process.name);
   },
   processLogs: function(processLog, index, self) {
