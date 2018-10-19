@@ -9,14 +9,8 @@ import { DEPLOYMENT_PIPELINES } from '../constants';
 import {searchExplorer} from './searchSaga';
 
 function *doRequest(entity, serviceFn, payload) {
-  console.dir("doRequest")
-  console.dir(arguments)
   payload.credentials = yield select(getCredentials);
   const {response, error} = yield call(serviceFn, payload);
-  console.dir("response")
-  console.dir(response)
-  console.dir("error")
-  console.dir(error)
   if(response) {
     yield put(entity.success(response.data, payload));
   } else if (error) {
