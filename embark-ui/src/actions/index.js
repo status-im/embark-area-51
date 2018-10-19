@@ -400,6 +400,13 @@ export const debugStepIntoForward = {
   failure: (error) => action(DEBUG_STEP_INTO_FORWARD[FAILURE], {error})
 };
 
+export const TOGGLE_BREAKPOINT = createRequestTypes('TOGGLE_BREAKPOINT');
+export const toggleBreakpoint = {
+  request: (filename, lineNumber) => action(TOGGLE_BREAKPOINT[REQUEST], {filename, lineNumber}),
+  success: (data, payload) => action(TOGGLE_BREAKPOINT[SUCCESS], {payload}),
+  failure: (error) => action(TOGGLE_BREAKPOINT[FAILURE], {error})
+};
+
 export const DEBUGGER_INFO = createRequestTypes('DEBUGGER_INFO');
 export const debuggerInfo = {
   success: (data) => action(DEBUGGER_INFO[SUCCESS], {data})
@@ -478,14 +485,6 @@ export function updateBaseEther(value) {
   return {
     type: UPDATE_BASE_ETHER,
     payload: value
-  };
-}
-
-export const TOGGLE_BREAKPOINT = 'TOGGLE_BREAKPOINT';
-export function toggleBreakpoint(filename, lineNumber) {
-  return {
-    type: TOGGLE_BREAKPOINT,
-    payload: {filename, lineNumber}
   };
 }
 

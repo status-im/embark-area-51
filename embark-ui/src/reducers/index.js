@@ -313,7 +313,7 @@ function messageVerification(state = DEFAULT_MESSAGE_VERIFICATION_STATE, action)
 }
 
 function breakpoints(state = {}, action) {
-  if (action.type === TOGGLE_BREAKPOINT) {
+  if (action.type === TOGGLE_BREAKPOINT[SUCCESS]) {
     const {filename, lineNumber} = action.payload;
     let lineNumbers = state[filename] || [];
     if (lineNumbers.includes(lineNumber)){

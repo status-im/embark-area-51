@@ -9,8 +9,14 @@ import { DEPLOYMENT_PIPELINES } from '../constants';
 import {searchExplorer} from './searchSaga';
 
 function *doRequest(entity, serviceFn, payload) {
+  console.dir("doRequest")
+  console.dir(arguments)
   payload.credentials = yield select(getCredentials);
   const {response, error} = yield call(serviceFn, payload);
+  console.dir("response")
+  console.dir(response)
+  console.dir("error")
+  console.dir(error)
   if(response) {
     yield put(entity.success(response.data, payload));
   } else if (error) {
@@ -76,6 +82,7 @@ export const debugStepOverForward = doRequest.bind(null, actions.debugStepOverFo
 export const debugStepOverBackward = doRequest.bind(null, actions.debugStepOverBackward, api.debugStepOverBackward);
 export const debugStepIntoForward = doRequest.bind(null, actions.debugStepIntoForward, api.debugStepIntoForward);
 export const debugStepIntoBackward = doRequest.bind(null, actions.debugStepIntoBackward, api.debugStepIntoBackward);
+export const toggleBreakpoint = doRequest.bind(null, actions.toggleBreakpoint, api.toggleBreakpoint);
 export const authenticate = doRequest.bind(null, actions.authenticate, api.authenticate);
 
 export const fetchCurrentFile = doRequest.bind(null, actions.currentFile, storage.fetchCurrentFile);
@@ -258,6 +265,10 @@ export function *watchDebugStepIntoForward() {
 
 export function *watchDebugStepIntoBackward() {
   yield takeEvery(actions.DEBUG_STEP_INTO_BACKWARD[actions.REQUEST], debugStepIntoBackward);
+}
+
+export function *watchToggleBreakpoint() {
+  yield takeEvery(actions.TOGGLE_BREAKPOINT[actions.REQUEST], toggleBreakpoint);
 }
 
 export function *watchAuthenticate() {
@@ -500,6 +511,7 @@ export default function *root() {
     fork(watchDebugStepOverBackward),
     fork(watchDebugStepIntoForward),
     fork(watchDebugStepIntoBackward),
+    fork(watchToggleBreakpoint),
     fork(watchAuthenticate),
     fork(watchAuthenticateSuccess),
     fork(watchLogout),

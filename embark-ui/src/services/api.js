@@ -213,6 +213,10 @@ export function debugStepIntoBackward(payload) {
   return post('/debugger/stepIntoBackward', {params: payload, credentials: payload.credentials});
 }
 
+export function toggleBreakpoint(payload) {
+  return post('/debugger/breakpoint', {params: payload, credentials: payload.credentials});
+}
+
 export function listenToDebugger(credentials) {
   return new WebSocket(`ws://${credentials.host}/embark-api/debugger`, [credentials.token]);
 }
