@@ -73,8 +73,8 @@ class ContractDebugger extends Component {
           <Grid.Col>
             <Button color="primary" onClick={(e) => this.debugJumpBack(e)}>Back</Button>
             <Button color="primary" onClick={(e) => this.debugJumpForward(e)}>Continue</Button>
-            <Button color="primary" onClick={(e) => this.debugStepOverForward(e)}>Step Back</Button>
-            <Button color="primary" onClick={(e) => this.debugStepOverBackward(e)}>Step Over</Button>
+            <Button color="primary" onClick={(e) => this.debugStepOverBackward(e)}>Step Back</Button>
+            <Button color="primary" onClick={(e) => this.debugStepOverForward(e)}>Step Over</Button>
             <Button color="primary" onClick={(e) => this.debugStepIntoForward(e)}>Step In</Button>
             <Button color="primary" onClick={(e) => this.debugStepIntoBackward(e)}>Step Out</Button>
           </Grid.Col>
