@@ -18,6 +18,13 @@
   word-wrap: break-word; 
 }
 
+.relative {
+  position: relative;
+}
 .hidden {
   display: none;
+}
+
+.react-json-view {
+  border-radius: .25rem;
 }
