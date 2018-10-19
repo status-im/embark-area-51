@@ -19,7 +19,7 @@ import {
   ListGroup,
   ListGroupItem
 } from "reactstrap";
-
+import ReactJson from 'react-json-view';
 
 class ContractDebugger extends Component {
 
@@ -83,20 +83,11 @@ class ContractDebugger extends Component {
         <Grid.Row>
           <Grid.Col>
             <br /><strong>Scopes</strong>
-            <br /><strong>Scope -> Locals</strong>
-            <br />{JSON.stringify(this.props.debuggerInfo.locals)}
-            <br /><strong>Scope -> Globals</strong>
-            <br />{JSON.stringify(this.props.debuggerInfo.globals)}
+            <div>
+              <ReactJson src={{locals: this.props.debuggerInfo.locals, contract: this.props.debuggerInfo.globals}} theme="monokai" sortKeys={true} name={false} collapse={1} />
+            </div>
           </Grid.Col>
         </Grid.Row>
-
-        <Grid.Row>
-          <Grid.Col>
-            <br />------------------------------
-            <br />{JSON.stringify(this.props.debuggerInfo)}
-          </Grid.Col>
-        </Grid.Row>
-
       </Page.Content>
     );
   }
