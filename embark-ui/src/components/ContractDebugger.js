@@ -71,12 +71,12 @@ class ContractDebugger extends Component {
 
         <Grid.Row>
           <Grid.Col>
-            <Button color="primary" onClick={(e) => this.debugJumpBack(e)}>Back</Button>
-            <Button color="primary" onClick={(e) => this.debugJumpForward(e)}>Continue</Button>
-            <Button color="primary" onClick={(e) => this.debugStepOverBackward(e)}>Step Back</Button>
-            <Button color="primary" onClick={(e) => this.debugStepOverForward(e)}>Step Over</Button>
-            <Button color="primary" onClick={(e) => this.debugStepIntoForward(e)}>Step In</Button>
-            <Button color="primary" onClick={(e) => this.debugStepIntoBackward(e)}>Step Out</Button>
+            <Button color="light" className="btn-square debugButton jumpBack" alt="jump to previous breakpoint" onClick={(e) => this.debugJumpBack(e)}></Button>
+            <Button color="light" className="btn-square debugButton jumpForward" alt="jump to revious breakpoint" onClick={(e) => this.debugJumpForward(e)}></Button>
+            <Button color="light" className="btn-square debugButton stepOverBack" alt="step back" onClick={(e) => this.debugStepOverBackward(e)}></Button>
+            <Button color="light" className="btn-square debugButton stepOverForward" alt="step over" onClick={(e) => this.debugStepOverForward(e)}></Button>
+            <Button color="light" className="btn-square debugButton stepIntoForward" alt="step into" onClick={(e) => this.debugStepIntoForward(e)}></Button>
+            <Button color="light" className="btn-square debugButton stepIntoBack" alt="step out" onClick={(e) => this.debugStepIntoBackward(e)}></Button>
           </Grid.Col>
         </Grid.Row>
 
