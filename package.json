@@ -99,7 +99,7 @@
     "swarm-api": "0.1.2",
     "tar": "3.2.1",
     "toposort": "1.0.7",
-    "remix-debug": "/Users/iurimatias/Projects/EthereumFoundation/remix/remix-debug",
+    "remix-debug": "git@github.com:ethereum/remix.git#cmd_and_library",
     "underscore": "1.9.1",
     "url-loader": "0.6.2",
     "uuid": "3.3.2",
