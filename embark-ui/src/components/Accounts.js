@@ -20,7 +20,7 @@ const Accounts = ({accounts}) => (
             <Row>
               <Col>
                 <strong>Balance</strong>
-                <div>{account.balance} Wei</div>
+                <div>{account.balance} Ether</div>
               </Col>
               <Col>
                 <strong>Tx Count</strong>
