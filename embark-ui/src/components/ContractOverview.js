@@ -64,6 +64,8 @@ class ContractFunction extends Component {
             <CardTitle>{this.props.method.name}</CardTitle>
           </CardHeader>
           <CardBody>
+            {(contractDisplay.state === 'Deployed') && <div>Deployed at {contractDisplay.address}</div>}
+            {(contractDisplay.state !== 'Deployed') && <div>{contractDisplay.address}</div>}
             {this.props.method.inputs.map(input => (
               <FormGroup key={input.name}>
                 <Label for={input.name}>{input.name}</Label>
