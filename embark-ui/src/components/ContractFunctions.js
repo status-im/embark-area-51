@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
-<<<<<<< HEAD
 import React, {Component} from 'react';
 import {
   Row,
   Col,
+  Form,
   FormGroup,
   Label,
   Input,
@@ -65,12 +65,10 @@ class ContractFunction extends Component {
             <CardTitle>{this.props.method.name}</CardTitle>
           </CardHeader>
           <CardBody>
-            {(contractDisplay.state === 'Deployed') && <div>Deployed at {contractDisplay.address}</div>}
-            {(contractDisplay.state !== 'Deployed') && <div>{contractDisplay.address}</div>}
             <Form action="" method="post" inline>
             {this.props.method.inputs.map(input => (
-              <FormGroup key={input.name}>
-                <Label for={input.name}>{input.name}</Label>
+              <FormGroup key={input.name} className="pr-1">
+                <Label for={input.name} className="pr-1">{input.name}</Label>
                 <Input name={input.name} id={input.name} placeholder={input.type} onChange={(e) => this.handleChange(e, input.name)}/>
               </FormGroup>
             ))}
@@ -119,7 +117,7 @@ const filterContractFunctions = (contractFunctions, contractName, method) => {
   ));
 };
 
-const ContractOverview = (props) => {
+const ContractFunctions = (props) => {
   const {contractProfile} = props;
 
   return (
@@ -137,16 +135,16 @@ const ContractOverview = (props) => {
   );
 };
 
-ContractOverview.propTypes = {
+ContractFunctions.propTypes = {
   onlyConstructor: PropTypes.bool,
   contractProfile: PropTypes.object,
   contractFunctions: PropTypes.arrayOf(PropTypes.object),
   postContractFunction: PropTypes.func
 };
 
-ContractOverview.defaultProps = {
+ContractFunctions.defaultProps = {
   onlyConstructor: false
 };
 
-export default ContractOverview;
+export default ContractFunctions;
 
