@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-<<<<<<< HEAD
 import React, {Component} from 'react';
 import {
   Row,
