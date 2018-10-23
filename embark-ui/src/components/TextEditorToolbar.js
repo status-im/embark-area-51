@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Row, FormGroup, Label, Input, Col, Button} from 'reactstrap';
+import {Row, Label, Col, Button} from 'reactstrap';
 import FontAwesomeIcon from 'react-fontawesome';
+import { AppSwitch } from '@coreui/react'
 
 const TextEditorToolbar = (props) => (
   <Row>
     <Col sm={4} md={2}>
-      <FormGroup check>
-        <Label check>
-          <Input type="checkbox" onChange={props.toggleShowHiddenFiles}/>
-          Show hidden files
-        </Label>
-      </FormGroup>
+      <Label className="mb-0 pt-1">
+        <AppSwitch color='success' variant='pill' size='sm' onChange={props.toggleShowHiddenFiles}/>
+        <span className="ml-1 align-top">Show hidden files</span>
+      </Label>
     </Col>
     <Col sm={4} md={6}>
       <strong>{props.currentFile.name}</strong>
