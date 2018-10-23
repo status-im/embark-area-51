@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import TextEditorToolbar from '../components/TextEditorToolbar';
 
 import {
-  saveCurrentFile as saveCurrentFileAction,
   saveFile as saveFileAction,
   removeFile as removeFileAction,
 } from '../actions';
@@ -12,7 +11,6 @@ import {
 class TextEditorToolbarContainer extends Component {
   save() {
     this.props.saveFile(this.props.currentFile);
-    this.props.saveCurrentFile(this.props.currentFile);
   }
 
   remove() {
@@ -32,7 +30,6 @@ class TextEditorToolbarContainer extends Component {
 TextEditorToolbarContainer.propTypes = {
   currentFile: PropTypes.object,
   isContract: PropTypes.bool,
-  saveCurrentFile: PropTypes.func,
   saveFile: PropTypes.func,
   removeFile: PropTypes.func,
   toggleShowHiddenFiles: PropTypes.func,
@@ -42,7 +39,6 @@ TextEditorToolbarContainer.propTypes = {
 export default connect(
   null,
   {
-    saveCurrentFile: saveCurrentFileAction.request,
     saveFile: saveFileAction.request,
     removeFile: removeFileAction.request
   },
