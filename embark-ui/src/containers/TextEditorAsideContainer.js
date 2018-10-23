@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import Preview from '../components/Preview';
 import {contracts as contractsAction} from '../actions';
 import {getContractsByPath} from "../reducers/selectors";
-import ContractOverview from '../components/ContractOverview';
+import ContractDetail from '../components/ContractDetail';
 import ContractLoggerContainer from '../containers/ContractLoggerContainer';
-import ContractFunctionsContainer from '../containers/ContractFunctionsContainer';
+import ContractOverviewContainer from '../containers/ContractOverviewContainer';
 
 class TextEditorAsideContainer extends Component {
   componentDidMount() {
@@ -18,12 +18,12 @@ class TextEditorAsideContainer extends Component {
     switch(this.props.currentAsideTab) {
       case 'browser':
         return <Preview />
-      case 'overview':
-        return this.props.contracts.map((contract, index) => <ContractOverview key={index} contract={contract} />)
+      case 'detail':
+        return this.props.contracts.map((contract, index) => <ContractDetail key={index} contract={contract} />)
       case 'logger':
         return this.props.contracts.map((contract, index) => <ContractLoggerContainer key={index} contract={contract} />)
-      case 'functions':
-        return this.props.contracts.map((contract, index) => <ContractFunctionsContainer key={index} contract={contract} />)
+      case 'overview':
+        return this.props.contracts.map((contract, index) => <ContractOverviewContainer key={index} contract={contract} />)
       default:
         return <React.Fragment></React.Fragment>;
     }

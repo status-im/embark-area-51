@@ -3,12 +3,12 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {contractProfile as contractProfileAction, contractFunction as contractFunctionAction} from '../actions';
-import ContractFunctions from '../components/ContractFunctions';
+import ContractOverview from '../components/ContractOverview';
 import DataWrapper from "../components/DataWrapper";
 import GasStationContainer from "../containers/GasStationContainer";
 import {getContractProfile, getContractFunctions} from "../reducers/selectors";
 
-class ContractFunctionsContainer extends Component {
+class ContractOverviewContainer extends Component {
   componentDidMount() {
     this.props.fetchContractProfile(this.props.contract.className);
   }
@@ -19,7 +19,7 @@ class ContractFunctionsContainer extends Component {
                    {...this.props}
                    render={({contractProfile, contractFunctions, postContractFunction}) => (
                      <React.Fragment>
-                       <ContractFunctions contractProfile={contractProfile}
+                       <ContractOverview contractProfile={contractProfile}
                                           contractFunctions={contractFunctions}
                                           postContractFunction={postContractFunction}/>
 
@@ -39,7 +39,7 @@ function mapStateToProps(state, props) {
   };
 }
 
-ContractFunctionsContainer.propTypes = {
+ContractOverviewContainer.propTypes = {
   contract: PropTypes.object,
   contractProfile: PropTypes.object,
   contractFunctions: PropTypes.arrayOf(PropTypes.object),
@@ -54,4 +54,4 @@ export default connect(
     fetchContractProfile: contractProfileAction.request,
     postContractFunction: contractFunctionAction.post
   }
-)(ContractFunctionsContainer);
+)(ContractOverviewContainer);

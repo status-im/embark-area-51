@@ -9,7 +9,6 @@ import TextEditorToolbarContainer from './TextEditorToolbarContainer';
 import {currentFile as currentFileAction} from '../actions';
 import {getCurrentFile} from '../reducers/selectors';
 
-
 import './EditorContainer.css';
 
 const DEFAULT_FILE = {name: 'newContract.sol', content: ''};

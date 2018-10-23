@@ -34,8 +34,8 @@ const TextEditorToolbar = (props) => (
               Overview
             </Button>
             <span className="mx-2">|</span>
-            <Button size="sm" color="primary" onClick={() => props.openAsideTab('functions')}>
-              Functions
+            <Button size="sm" color="primary" onClick={() => props.openAsideTab('detail')}>
+              Detail
             </Button>
             <span className="mx-2">|</span>
             <Button size="sm" color="primary" onClick={() => props.openAsideTab('logger')}>
