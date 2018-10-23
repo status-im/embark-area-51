@@ -170,7 +170,7 @@ const ContractOverview = (props) => {
                                          method={method}
                                          contractFunctions={filterContractFunctions(props.contractFunctions, contractProfile.name, method.name)}
                                          contractProfile={contractProfile}
-                                         postContractFunction={props.postContractFunction}/>)}
+                                         postContractFunction={props.postContractFunction} />)}
     </div>
   );
 };
