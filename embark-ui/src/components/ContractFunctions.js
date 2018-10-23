@@ -79,7 +79,7 @@ class ContractFunction extends Component {
       <Col xs={12}>
         <Card>
           <CardHeader>
-            <CardTitle className="collapsable" onClick={() => this.toggleFunction()}>
+            <CardTitle className="collapsable contractFunction" onClick={() => this.toggleFunction()}>
               {ContractFunction.isPureCall(this.props.method) &&
                 <button class="btn btn-brand btn-sm" style={{ "color": "#fff", "background-color": "#ff4500", "border-color": "#ff4500", "float": "right" }}>call</button>
               }
@@ -94,13 +94,14 @@ class ContractFunction extends Component {
               <Form action="" method="post" inline>
               {this.props.method.inputs.map(input => (
                 <FormGroup key={input.name} className="pr-1">
-                  <Label for={input.name} className="pr-1">{input.name}</Label>
+                  <Label for={input.name} className="pr-1">{input.name}: </Label>
                   <Input name={input.name} id={input.name} placeholder={input.type} onChange={(e) => this.handleChange(e, input.name)}/>
                 </FormGroup>
               ))}
               </Form>
               {!ContractFunction.isPureCall(this.props.method) &&
-                <div>
+                <Col xs={12} style={{"margin-bottom": "5px", "margin-top": "5px"}}>
+                  <Row>
                   <strong className="collapsable" onClick={() => this.toggleOptions()}><i className={this.state.optionsCollapse ? 'fa fa-caret-down' : 'fa fa-caret-right'}/>Advanced Options</strong>
                   <Collapse isOpen={this.state.optionsCollapse}>
                     <Form action="" method="post" inline>
@@ -110,11 +111,14 @@ class ContractFunction extends Component {
                       </FormGroup>
                     </Form>
                   </Collapse>
-                </div>
+                 </Row>
+               </Col>
               }
-              <Button color="primary" disabled={this.callDisabled()} onClick={(e) => this.handleCall(e)} style={{"float": "right"}}>
-                {this.buttonTitle()}
-              </Button>
+              <div align="right">
+                <Button color="primary" disabled={this.callDisabled()} onClick={(e) => this.handleCall(e)} >
+                  {this.buttonTitle()}
+                </Button>
+              </div>
             </CardBody>
           </Collapse>
           {this.props.contractFunctions && this.props.contractFunctions.length > 0 && <CardFooter>
