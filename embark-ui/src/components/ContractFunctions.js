@@ -17,7 +17,6 @@ import {
   ListGroup,
   ListGroupItem
 } from "reactstrap";
-import {formatContractForDisplay} from '../utils/presentation';
 
 class ContractFunction extends Component {
   constructor(props) {
@@ -77,6 +76,7 @@ class ContractFunction extends Component {
 
   render() {
     return (
+      <Col xs={12}>
         <Card>
           <CardHeader>
             <CardTitle className="collapsable contractFunction" onClick={() => this.toggleFunction()}>
@@ -103,23 +103,19 @@ class ContractFunction extends Component {
                 <Col xs={12} style={{"margin-bottom": "5px", "margin-top": "5px"}}>
                   <Row>
                   <strong className="collapsable" onClick={() => this.toggleOptions()}><i className={this.state.optionsCollapse ? 'fa fa-caret-down' : 'fa fa-caret-right'}/>Advanced Options</strong>
-                    <Col xs={12} style={{"margin-bottom": "5px", "margin-top": "5px"}}>
-                      <Row>
-                        <Collapse isOpen={this.state.optionsCollapse}>
-                          <Form action="" method="post" inline>
-                            <FormGroup key="gasPrice" className="pr-1">
-                              <Label for="gasPrice" className="pr-1">Gas Price (in GWei)(optional)</Label>
-                              <Input name="gasPrice" id="gasPrice" onChange={(e) => this.handleChange(e, 'gasPrice')}/>
-                            </FormGroup>
-                          </Form>
-                        </Collapse>
-                     </Row>
-                   </Col>
+                  <Collapse isOpen={this.state.optionsCollapse}>
+                    <Form action="" method="post" inline>
+                      <FormGroup key="gasPrice" className="pr-1">
+                        <Label for="gasPrice" className="pr-1">Gas Price (in GWei)(optional)</Label>
+                        <Input name="gasPrice" id="gasPrice" onChange={(e) => this.handleChange(e, 'gasPrice')}/>
+                      </FormGroup>
+                    </Form>
+                  </Collapse>
                  </Row>
                </Col>
               }
               <div align="right">
-                <Button color="primary" disabled={this.callDisabled()} onClick={(e) => this.handleCall(e)}>
+                <Button color="primary" disabled={this.callDisabled()} onClick={(e) => this.handleCall(e)} >
                   {this.buttonTitle()}
                 </Button>
               </div>
@@ -136,6 +132,7 @@ class ContractFunction extends Component {
             </ListGroup>
           </CardFooter>}
         </Card>
+      </Col>
     );
   }
 }
@@ -153,15 +150,11 @@ const filterContractFunctions = (contractFunctions, contractName, method) => {
   ));
 };
 
-const ContractOverview = (props) => {
-  const {contractProfile, contract} = props;
-  const contractDisplay = formatContractForDisplay(contract);
+const ContractFunctions = (props) => {
+  const {contractProfile} = props;
 
   return (
-    <div>
-      {(contractDisplay.state === 'Deployed') && <div>Deployed at {contractDisplay.address}</div>}
-      {(contractDisplay.state !== 'Deployed') && <div>{contractDisplay.address}</div>}
-      <br />
+    <Row>
       {contractProfile.methods
         .filter((method) => {
           return props.onlyConstructor ? method.type === 'constructor' : method.type !== 'constructor';
@@ -170,22 +163,21 @@ const ContractOverview = (props) => {
                                          method={method}
                                          contractFunctions={filterContractFunctions(props.contractFunctions, contractProfile.name, method.name)}
                                          contractProfile={contractProfile}
-                                         postContractFunction={props.postContractFunction} />)}
-    </div>
+                                         postContractFunction={props.postContractFunction}/>)}
+    </Row>
   );
 };
 
-ContractOverview.propTypes = {
-  contract: PropTypes.object,
+ContractFunctions.propTypes = {
   onlyConstructor: PropTypes.bool,
   contractProfile: PropTypes.object,
   contractFunctions: PropTypes.arrayOf(PropTypes.object),
   postContractFunction: PropTypes.func
 };
 
-ContractOverview.defaultProps = {
+ContractFunctions.defaultProps = {
   onlyConstructor: false
 };
 
-export default ContractOverview;
+export default ContractFunctions;
 

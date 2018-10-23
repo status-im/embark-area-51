@@ -21,6 +21,7 @@ class ContractOverviewContainer extends Component {
                      <React.Fragment>
                        <ContractOverview contractProfile={contractProfile}
                                           contractFunctions={contractFunctions}
+                                          contract={this.props.contract}
                                           postContractFunction={postContractFunction}/>
 
                        <GasStationContainer/>
