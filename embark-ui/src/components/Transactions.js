@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {Row, Col, Card, CardHeader, CardBody} from 'reactstrap';
 import PropTypes from 'prop-types';
+import DebugButton from './DebugButton';
 
 import CardTitleIdenticon from './CardTitleIdenticon';
 import Pagination from "./Pagination";
@@ -21,6 +22,11 @@ const Transactions = ({transactions, changePage, currentPage, numberOfPages}) =>
                   {transaction.hash}
                 </Link>
               </CardTitleIdenticon>
+              <Row>
+                <Col>
+                  <DebugButton transactionHash={transaction.hash} />
+                </Col>
+              </Row>
               <Row>
                 <Col md={6}>
                   <strong>Block number</strong>

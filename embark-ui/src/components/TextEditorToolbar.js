@@ -20,19 +20,19 @@ const TextEditorToolbar = (props) => (
         {props.isContract &&
           <React.Fragment>
             <NavLink className="btn" href="#" onClick={() => props.openAsideTab('overview')}>
-              <FontAwesomeIcon className="mr-2" name="info-circle" /> Overview
+              <FontAwesomeIcon className="mr-2" name="info-circle" />Overview
             </NavLink>
             <NavLink className="btn" href="#" onClick={() => props.openAsideTab('detail')}>
-              <FontAwesomeIcon className="mr-2" name="file-text-o" /> Details
+              <FontAwesomeIcon className="mr-2" name="file-text-o" />Details
             </NavLink>
             <NavLink className="btn" href="#" onClick={() => props.openAsideTab('logger')}>Logger</NavLink>
-            <NavLink className="btn" href="#" onClick={() => props.openAsideTab('debugger')}>
-              <FontAwesomeIcon className="mr-2" name="bug" /> Debugger
-            </NavLink>
           </React.Fragment>
         }
         <NavLink className="btn" href="#" onClick={() => props.openAsideTab('browser')}>
-          <FontAwesomeIcon className="mr-2" name="compass" /> Browser
+          <FontAwesomeIcon className="mr-2" name="compass" />Browser
+        </NavLink>
+        <NavLink className="btn" href="#" onClick={() => props.openAsideTab('debugger')}>
+          <FontAwesomeIcon className="mr-2" name="bug" />Debugger
         </NavLink>
       </Nav>
 

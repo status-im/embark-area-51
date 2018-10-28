@@ -2,23 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Row, Col} from 'reactstrap';
+import {withRouter} from "react-router-dom";
 import TextEditorAsideContainer from './TextEditorAsideContainer';
 import TextEditorContainer from './TextEditorContainer';
 import FileExplorerContainer from './FileExplorerContainer';
 import TextEditorToolbarContainer from './TextEditorToolbarContainer';
 import {fetchEditorTabs as fetchEditorTabsAction} from '../actions';
 import {getCurrentFile} from '../reducers/selectors';
+import {getDebuggerTransactionHash} from '../utils/utils';
 
 import './EditorContainer.css';
 
 class EditorContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {currentAsideTab: '', showHiddenFiles: false, currentFile: this.props.currentFile};
+    this.state = {
+      currentAsideTab: '', 
+      showHiddenFiles: false,
+      currentFile: this.props.currentFile,
+      debuggerTransactionHash: ''
+    };
   }
 
   componentDidMount() {
     this.props.fetchEditorTabs();
+    const debuggerTransactionHash = getDebuggerTransactionHash(this.props.location);
+    if (debuggerTransactionHash) {
+      this.setState({debuggerTransactionHash, currentAsideTab: 'debugger'});
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -71,7 +82,9 @@ class EditorContainer extends React.Component {
           <TextEditorContainer currentFile={this.props.currentFile} onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
         </Col>
         {this.state.currentAsideTab && <Col xs={6} md={3}>
-          <TextEditorAsideContainer currentAsideTab={this.state.currentAsideTab} currentFile={this.props.currentFile} />
+          <TextEditorAsideContainer debuggerTransactionHash={this.state.debuggerTransactionHash} 
+                                    currentAsideTab={this.state.currentAsideTab}
+                                    currentFile={this.props.currentFile} />
         </Col>}
       </Row>
     );
@@ -91,8 +104,7 @@ EditorContainer.propTypes = {
   fetchEditorTabs: PropTypes.func
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   {fetchEditorTabs: fetchEditorTabsAction.request},
-)(EditorContainer);
-
+)(EditorContainer));

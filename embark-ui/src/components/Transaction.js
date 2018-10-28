@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {Row, Col, Card, CardHeader, CardBody} from 'reactstrap';
 import PropTypes from 'prop-types';
 
+import DebugButton from './DebugButton';
 import Description from './Description';
 import CardTitleIdenticon from './CardTitleIdenticon';
 import {utils} from 'web3';
@@ -13,7 +14,13 @@ const Transaction = ({transaction}) => (
     <Col>
       <Card>
         <CardHeader>
-          <CardTitleIdenticon id={transaction.hash}>Transaction {transaction.hash}</CardTitleIdenticon>
+          <CardTitleIdenticon id={transaction.hash}>
+            Transaction {transaction.hash}
+            <div className="float-right">
+              <DebugButton transactionHash={transaction.hash} />
+            </div>
+          </CardTitleIdenticon>
+          
         </CardHeader>
         <CardBody>
           <dl className="row">

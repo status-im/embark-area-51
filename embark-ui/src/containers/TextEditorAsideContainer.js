@@ -21,16 +21,14 @@ class TextEditorAsideContainer extends Component {
       case 'browser':
         return <Preview />;
       case 'debugger':
-        return this.props.contracts.map((contract, index) => {
-          return (
-            <Card key={'contract-' + index}>
-              <CardBody>
-                <h2>{contract.className} - Details</h2>
-                <ContractDebuggerContainer key={index} contract={contract} />
-              </CardBody>
-            </Card>
-          );
-        });
+        return (
+          <Card>
+            <CardBody>
+              <h2>Debugger</h2>
+              <ContractDebuggerContainer debuggerTransactionHash={this.props.debuggerTransactionHash} />
+            </CardBody>
+          </Card>
+        );
       case 'detail':
         return this.props.contracts.map((contract, index) => {
           return (
@@ -48,7 +46,7 @@ class TextEditorAsideContainer extends Component {
             <Card key={'contract-' + index}>
               <CardBody>
                 <h2>{contract.className} - Transactions</h2>
-                <ContractLoggerContainer key={index} contract={contract} />)
+                <ContractLoggerContainer key={index} contract={contract} />
               </CardBody>
             </Card>
           );
@@ -78,6 +76,7 @@ function mapStateToProps(state, props) {
 
 TextEditorAsideContainer.propTypes = {
   currentFile: PropTypes.object,
+  debuggerTransactionHash: PropTypes.string,
   currentAsideTab: PropTypes.string,
   contract: PropTypes.array,
   fetchContracts: PropTypes.func,

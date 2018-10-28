@@ -9,6 +9,18 @@ import {
 import ReactJson from 'react-json-view';
 
 class ContractDebugger extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {txHash: ''};
+  }
+
+  componentDidMount() {
+    if (this.props.debuggerTransactionHash) {
+      this.setState({txHash: this.props.debuggerTransactionHash});  
+      this.props.startDebug(this.props.debuggerTransactionHash);
+    }
+  }
+
   handleChange(e) {
     this.setState({txHash: e.target.value});
   }
@@ -46,7 +58,7 @@ class ContractDebugger extends Component {
       <div>
         <Row>
           <Col>
-            <Input name="txHash" id="txHash" onChange={(e) => this.handleChange(e)}/>
+            <Input name="txHash" id="txHash" value={this.state.txHash} onChange={(e) => this.handleChange(e)}/>
             <Button color="primary" onClick={(e) => this.debug(e)}>Debug Tx</Button>
           </Col>
         </Row>
@@ -74,7 +86,7 @@ class ContractDebugger extends Component {
 }
 
 ContractDebugger.propTypes = {
-  contract: PropTypes.object.isRequired,
+  debuggerTransactionHash: PropTypes.string,
   startDebug: PropTypes.func,
   debugJumpBack: PropTypes.func,
   debugJumpForward: PropTypes.func,
