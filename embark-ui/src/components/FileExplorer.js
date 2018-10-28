@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 import {Treebeard, decorators} from 'react-treebeard';
 import classNames from 'classnames';
 import {DARK_THEME} from '../constants';
+import FontAwesome from 'react-fontawesome';
+
+import './FileExplorer.css';
 
 const isDarkTheme= (theme) => theme === DARK_THEME;
 
@@ -77,66 +80,104 @@ const style = (theme) => ({
   }
 });
 
+const Container = (props) => (
+  <div className="w-100" onClick={props.onClick}>
+    <props.decorators.Toggle style={props.style.toggle}/>
+    <props.decorators.Header  node={props.node} style={props.style.header}/>
+  </div>
+)
 
-const Header = ({style, node}) => {
-  let icon;
-
-  if (!node.children) {
-    const extension = node.path.split('.').pop();
-    switch(extension) {
-      case 'html':
-        icon = 'text-danger fa fa-html5';
-        break;
-      case 'css':
-        icon = 'text-warning fa fa-css3';
-        break;
-      case 'js':
-      case 'jsx':
-        icon = 'text-primary icon js-icon';
-        break;
-      case 'json':
-        icon = 'text-success icon hjson-icon';
-        break;
-      case 'sol':
-        icon = 'text-warning icon solidity-icon';
-        break;
-      default:
-        icon = 'fa fa-file-o';
-    }
-  } else {
-    switch(node.name) {
-      case 'dist':
-        icon = 'text-danger icon easybuild-icon';
-        break;
-      case 'config':
-        icon = 'text-warning fa fa-cogs';
-        break;
-      case 'contracts':
-        icon = 'text-success icon appstore-icon';
-        break;
-      case 'app':
-        icon = 'text-primary fa fa-code';
-        break;
-      case 'test':
-        icon = 'icon test-dir-icon';
-        break;
-      case 'node_modules':
-        icon = 'fa fa-folder-o';
-        break;
-      default:
-        icon = 'fa fa-folder';
-    }
-
+class Header extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {active: null};
   }
 
-  return (
-    <div className="mb-1" style={style.base}>
-      <div style={style.title}>
-        <i className={classNames('mr-1', icon)} />
-        {node.name}
+  resolveIcon() {
+    let icon;
+
+    if (!this.props.node.children) {
+      const extension = this.props.node.path.split('.').pop();
+      switch(extension) {
+        case 'html':
+          icon = 'text-danger fa fa-html5';
+          break;
+        case 'css':
+          icon = 'text-warning fa fa-css3';
+          break;
+        case 'js':
+        case 'jsx':
+          icon = 'text-primary icon js-icon';
+          break;
+        case 'json':
+          icon = 'text-success icon hjson-icon';
+          break;
+        case 'sol':
+          icon = 'text-warning icon solidity-icon';
+          break;
+        default:
+          icon = 'fa fa-file-o';
+      }
+    } else {
+      switch(this.props.node.name) {
+        case 'dist':
+          icon = 'text-danger icon easybuild-icon';
+          break;
+        case 'config':
+          icon = 'text-warning fa fa-cogs';
+          break;
+        case 'contracts':
+          icon = 'text-success icon appstore-icon';
+          break;
+        case 'app':
+          icon = 'text-primary fa fa-code';
+          break;
+        case 'test':
+          icon = 'icon test-dir-icon';
+          break;
+        case 'node_modules':
+          icon = 'fa fa-folder-o';
+          break;
+        default:
+          icon = 'fa fa-folder';
+      }
+    }
+    return icon;
+  }
+
+  activateNode() {
+    this.setState({active : true});
+  }
+
+  deactivateNode() {
+    this.setState({active : true});
+  }
+
+  renderAction() {
+    return (
+      <div className="file-explorer__action">
+        {this.props.node.children &&
+          <React.Fragment>
+            <FontAwesome name="plus" className="text-success mr-2" />
+            <FontAwesome name="folder-open" className="text-success mr-2" />
+          </React.Fragment>
+        }
+        <FontAwesome name="trash" className="text-danger" />
       </div>
-    </div>
-  );
+    )
+  }
+
+  render() {
+    return (
+      <div className="mb-1 d-inline-block" style={style.base} 
+           onMouseEnter={() => this.activateNode()} 
+           onMouseLeave={() => this.deactivateNode()}>
+        <i className={classNames('mr-1', this.resolveIcon())} />
+        <span className="">{this.props.node.name}</span>
+        {this.state.active && this.renderAction()}
+      </div>
+    );
+  }
 };
 
 Header.propTypes = {
@@ -145,6 +186,7 @@ Header.propTypes = {
 };
 
 decorators.Header = Header;
+decorators.Container = Container;
 
 class FileExplorer extends React.Component {
   constructor(props) {
