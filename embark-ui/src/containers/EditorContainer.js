@@ -9,13 +9,15 @@ import TextEditorToolbarContainer from './TextEditorToolbarContainer';
 import {fetchEditorTabs as fetchEditorTabsAction} from '../actions';
 import {getCurrentFile} from '../reducers/selectors';
 import classnames from 'classnames';
+import Resizable from 're-resizable';
 
 import './EditorContainer.css';
 
 class EditorContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {currentAsideTab: '', showHiddenFiles: false, currentFile: this.props.currentFile};
+    this.state = {currentAsideTab: '', showHiddenFiles: false, currentFile: this.props.currentFile,
+      editorHeight: '100%', editorWidth: '85%', asideHeight: '100%', asideWidth: '25%'};
   }
 
   componentDidMount() {
@@ -43,14 +45,18 @@ class EditorContainer extends React.Component {
   }
 
   openAsideTab(newTab) {
+    if (this.state.currentAsideTab === '') {
+      console.log('REMOVE', this.state.editorWidth, this.state.asideWidth);
+      this.setState({editorWidth: (parseInt(this.state.editorWidth, 10) - parseInt(this.state.asideWidth, 10)) + '%'});
+    }
     if (newTab === this.state.currentAsideTab) {
-      return this.setState({currentAsideTab: ''});
+      console.log('ADD', this.state.editorWidth, this.state.asideWidth);
+      return this.setState({
+        currentAsideTab: '',
+        editorWidth: (parseInt(this.state.editorWidth, 10) + parseInt(this.state.asideWidth, 10)) + '%'
+      });
     }
     this.setState({currentAsideTab: newTab});
-  }
-
-  textEditorMdSize() {
-    return this.state.currentAsideTab.length ? 7 : 10;
   }
 
   render() {
@@ -62,19 +68,34 @@ class EditorContainer extends React.Component {
                                       currentFile={this.props.currentFile}
                                       activeTab={this.state.currentAsideTab}/>
         </Col>
-        <Col sm={4} md={2} xl={2} lg={2} className="border-right">
-          <FileExplorerContainer showHiddenFiles={this.state.showHiddenFiles} toggleShowHiddenFiles={() => this.toggleShowHiddenFiles()} />
+        <Col defaultSize={{width: '15%',height: '100%'}} className="border-right"
+                   enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
+          <FileExplorerContainer showHiddenFiles={this.state.showHiddenFiles}
+                                 toggleShowHiddenFiles={() => this.toggleShowHiddenFiles()}/>
         </Col>
-        <Col sm={8} md={this.textEditorMdSize()} className="text-editor-container">
-          <TextEditorContainer currentFile={this.props.currentFile} onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
-        </Col>
+        <Resizable
+                   size={{ width: this.state.editorWidth, height: this.state.editorHeight }}
+                   onResizeStop={(e, direction, ref, _d) => {
+                     console.log(ref);
+                     this.setState({
+                       editorWidth: ref.style.width,
+                       height: ref.style.height
+                     });
+                     this.editor.handleResize();
+                   }}
+                   className="text-editor-container"
+                   enable={{ top:false, right:true, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
+          <TextEditorContainer ref={instance => {
+            if (instance) this.editor = instance.getWrappedInstance().editor;
+          }} currentFile={this.props.currentFile} onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
+        </Resizable>
         {this.state.currentAsideTab &&
-        <Col sm={12} md={3} className="border-left-0 relative">
+        <Resizable defaultSize={{width: '25%', height: '100%'}} className="border-left-0 relative">
           <div className="editor-aside">
             <TextEditorAsideContainer currentAsideTab={this.state.currentAsideTab}
                                       currentFile={this.props.currentFile}/>
           </div>
-        </Col>}
+        </Resizable>}
       </Row>
     );
   }
