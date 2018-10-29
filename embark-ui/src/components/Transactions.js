@@ -7,7 +7,7 @@ import DebugButton from './DebugButton';
 import CardTitleIdenticon from './CardTitleIdenticon';
 import Pagination from "./Pagination";
 
-const Transactions = ({transactions, changePage, currentPage, numberOfPages}) => (
+const Transactions = ({transactions, contracts, changePage, currentPage, numberOfPages}) => (
   <Row>
     <Col>
       <Card>
@@ -24,7 +24,7 @@ const Transactions = ({transactions, changePage, currentPage, numberOfPages}) =>
               </CardTitleIdenticon>
               <Row>
                 <Col>
-                  <DebugButton transactionHash={transaction.hash} />
+                  <DebugButton transaction={transaction} contracts={contracts} />
                 </Col>
               </Row>
               <Row>
@@ -56,6 +56,7 @@ const Transactions = ({transactions, changePage, currentPage, numberOfPages}) =>
 
 Transactions.propTypes = {
   transactions: PropTypes.arrayOf(PropTypes.object),
+  contracts: PropTypes.arrayOf(PropTypes.object),
   changePage: PropTypes.func,
   currentPage: PropTypes.number,
   numberOfPages: PropTypes.number

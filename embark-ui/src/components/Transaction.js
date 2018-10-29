@@ -9,7 +9,7 @@ import CardTitleIdenticon from './CardTitleIdenticon';
 import {utils} from 'web3';
 
 
-const Transaction = ({transaction}) => (
+const Transaction = ({transaction, contracts}) => (
   <Row>
     <Col>
       <Card>
@@ -17,7 +17,7 @@ const Transaction = ({transaction}) => (
           <CardTitleIdenticon id={transaction.hash}>
             Transaction {transaction.hash}
             <div className="float-right">
-              <DebugButton transactionHash={transaction.hash} />
+              <DebugButton contracts={contracts} transaction={transaction} />
             </div>
           </CardTitleIdenticon>
           
@@ -40,6 +40,7 @@ const Transaction = ({transaction}) => (
 );
 
 Transaction.propTypes = {
+  contracts: PropTypes.arrayOf(PropTypes.object),
   transaction: PropTypes.object
 };
 

@@ -123,7 +123,7 @@ class ContractLogger extends React.Component {
                   this.dataToDisplay().map((log, index) => {
                     return (
                       <tr key={'log-' + index}>
-                        <td><DebugButton transactionHash={log.transactionHash}/></td>
+                        <td><DebugButton always transaction={{hash: log.transactionHash}}/></td>
                         <td>{`${log.name}.${log.functionName}(${log.paramString})`}</td>
                         <td>{log.events.join(', ')}</td>
                         <td>{log.gasUsed}</td>

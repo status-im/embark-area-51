@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {Card, CardBody} from 'reactstrap';
 
 import Preview from '../components/Preview';
-import {contracts as contractsAction} from '../actions';
 import {getContractsByPath} from "../reducers/selectors";
 import ContractDetail from '../components/ContractDetail';
 import ContractLoggerContainer from '../containers/ContractLoggerContainer';
@@ -12,9 +11,6 @@ import ContractOverviewContainer from '../containers/ContractOverviewContainer';
 import ContractDebuggerContainer from '../containers/ContractDebuggerContainer';
 
 class TextEditorAsideContainer extends Component {
-  componentDidMount() {
-    this.props.fetchContracts();
-  }
 
   render() {
     switch(this.props.currentAsideTab) {
@@ -79,13 +75,10 @@ TextEditorAsideContainer.propTypes = {
   debuggerTransactionHash: PropTypes.string,
   currentAsideTab: PropTypes.string,
   contract: PropTypes.array,
-  fetchContracts: PropTypes.func,
   contracts: PropTypes.array
 };
 
 export default connect(
   mapStateToProps,
-  {
-    fetchContracts: contractsAction.request
-  },
+  {},
 )(TextEditorAsideContainer);

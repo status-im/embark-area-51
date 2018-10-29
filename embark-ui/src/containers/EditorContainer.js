@@ -7,8 +7,13 @@ import TextEditorAsideContainer from './TextEditorAsideContainer';
 import TextEditorContainer from './TextEditorContainer';
 import FileExplorerContainer from './FileExplorerContainer';
 import TextEditorToolbarContainer from './TextEditorToolbarContainer';
-import {fetchEditorTabs as fetchEditorTabsAction} from '../actions';
-import {getCurrentFile} from '../reducers/selectors';
+import {
+  fetchEditorTabs as fetchEditorTabsAction,
+  contracts as contractsAction,
+  file as fileAction,
+  transaction as transactionAction
+} from '../actions';
+import {getCurrentFile, getContracts, getTransaction} from '../reducers/selectors';
 import {getDebuggerTransactionHash} from '../utils/utils';
 
 import './EditorContainer.css';
@@ -20,22 +25,32 @@ class EditorContainer extends React.Component {
       currentAsideTab: '', 
       showHiddenFiles: false,
       currentFile: this.props.currentFile,
-      debuggerTransactionHash: ''
     };
   }
 
   componentDidMount() {
     this.props.fetchEditorTabs();
-    const debuggerTransactionHash = getDebuggerTransactionHash(this.props.location);
-    if (debuggerTransactionHash) {
-      this.setState({debuggerTransactionHash, currentAsideTab: 'debugger'});
-    }
+    this.props.fetchContracts();
+    this.props.fetchTransaction(this.props.debuggerTransactionHash);
   }
 
   componentDidUpdate(prevProps) {
     if(this.props.currentFile.path !== prevProps.currentFile.path) {
       this.setState({currentFile: this.props.currentFile});
     }
+
+    if(this.props.contracts && this.props.transaction && !prevProps.transaction) {
+      const debuggingContract = this.props.contracts.find(contract => contract.address === this.props.transaction.to)
+      if (debuggingContract) {
+        this.setState({currentAsideTab: 'debugger'})
+        this.props.fetchFile({path: debuggingContract.path});
+      }
+    }
+  }
+
+  updateDebuggerTransactionHash(hash){
+    this.props.fetchTransaction(hash)
+    this.setState({hash, currentAsideTab: 'debugger'});
   }
 
   isContract() {
@@ -82,7 +97,7 @@ class EditorContainer extends React.Component {
           <TextEditorContainer currentFile={this.props.currentFile} onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
         </Col>
         {this.state.currentAsideTab && <Col xs={6} md={3}>
-          <TextEditorAsideContainer debuggerTransactionHash={this.state.debuggerTransactionHash} 
+          <TextEditorAsideContainer debuggerTransactionHash={this.props.debuggerTransactionHash} 
                                     currentAsideTab={this.state.currentAsideTab}
                                     currentFile={this.props.currentFile} />
         </Col>}
@@ -91,20 +106,34 @@ class EditorContainer extends React.Component {
   }
 }
 
-function mapStateToProps(state, _props) {
+function mapStateToProps(state, props) {
   const currentFile = getCurrentFile(state);
+  const debuggerTransactionHash = getDebuggerTransactionHash(props.location);
 
   return {
-    currentFile
+    currentFile,
+    debuggerTransactionHash,
+    transaction: getTransaction(state, debuggerTransactionHash),
+    contracts: getContracts(state)
   };
 }
 
 EditorContainer.propTypes = {
+  contracts: PropTypes.array,
+  transaction: PropTypes.object,
+  fetchContracts: PropTypes.func,
+  fetchFile: PropTypes.func,
+  fetchTransaction: PropTypes.func,
   currentFile: PropTypes.object,
   fetchEditorTabs: PropTypes.func
 };
 
 export default withRouter(connect(
   mapStateToProps,
-  {fetchEditorTabs: fetchEditorTabsAction.request},
+  {
+    fetchEditorTabs: fetchEditorTabsAction.request,
+    fetchTransaction: transactionAction.request,
+    fetchFile: fileAction.request,
+    fetchContracts: contractsAction.request
+  },
 )(EditorContainer));

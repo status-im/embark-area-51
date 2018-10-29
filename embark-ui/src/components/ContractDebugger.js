@@ -7,6 +7,7 @@ import {
   Button
 } from "reactstrap";
 import ReactJson from 'react-json-view';
+import DebugButton from './DebugButton';
 
 class ContractDebugger extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class ContractDebugger extends Component {
         <Row>
           <Col>
             <Input name="txHash" id="txHash" value={this.state.txHash} onChange={(e) => this.handleChange(e)}/>
-            <Button color="primary" onClick={(e) => this.debug(e)}>Debug Tx</Button>
+            <DebugButton always transaction={{hash: this.state.txHash}} />
           </Col>
         </Row>
         <Row>
