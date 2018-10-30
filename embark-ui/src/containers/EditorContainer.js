@@ -16,8 +16,9 @@ import './EditorContainer.css';
 class EditorContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.DEFAULT_EDITOR_WIDTH = 85;
     this.state = {currentAsideTab: '', showHiddenFiles: false, currentFile: this.props.currentFile,
-      editorHeight: '100%', editorWidth: '85%', asideHeight: '100%', asideWidth: '25%'};
+      editorHeight: '100%', editorWidth: this.DEFAULT_EDITOR_WIDTH + '%', asideHeight: '100%', asideWidth: '25%'};
   }
 
   componentDidMount() {
@@ -46,14 +47,12 @@ class EditorContainer extends React.Component {
 
   openAsideTab(newTab) {
     if (this.state.currentAsideTab === '') {
-      console.log('REMOVE', this.state.editorWidth, this.state.asideWidth);
-      this.setState({editorWidth: (parseInt(this.state.editorWidth, 10) - parseInt(this.state.asideWidth, 10)) + '%'});
+      this.setState({editorWidth: (parseFloat(this.state.editorWidth, 10) - parseFloat(this.state.asideWidth, 10)) + '%'});
     }
     if (newTab === this.state.currentAsideTab) {
-      console.log('ADD', this.state.editorWidth, this.state.asideWidth);
       return this.setState({
         currentAsideTab: '',
-        editorWidth: (parseInt(this.state.editorWidth, 10) + parseInt(this.state.asideWidth, 10)) + '%'
+        editorWidth: (parseFloat(this.state.editorWidth, 10) + parseFloat(this.state.asideWidth, 10)) + '%'
       });
     }
     this.setState({currentAsideTab: newTab});
@@ -91,7 +90,12 @@ class EditorContainer extends React.Component {
         {this.state.currentAsideTab &&
         <Resizable defaultSize={{width: '25%', height: 'auto'}}
                    handleClasses={{left: 'resizer-handle', right: 'resizer-handle'}} className="border-left-0 relative"
-                   enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
+                   enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
+                   onResize={(e, direction, ref, _d) => {
+                     this.setState({
+                       editorWidth: this.DEFAULT_EDITOR_WIDTH - parseFloat(ref.style.width, 10) + '%'
+                     });
+                   }}>
           <div className="editor-aside">
             <TextEditorAsideContainer currentAsideTab={this.state.currentAsideTab}
                                       currentFile={this.props.currentFile}/>
