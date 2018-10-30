@@ -68,15 +68,14 @@ class EditorContainer extends React.Component {
                                       currentFile={this.props.currentFile}
                                       activeTab={this.state.currentAsideTab}/>
         </Col>
-        <Col defaultSize={{width: '15%',height: '100%'}} className="border-right"
-                   enable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
+        <Col className="border-right">
           <FileExplorerContainer showHiddenFiles={this.state.showHiddenFiles}
                                  toggleShowHiddenFiles={() => this.toggleShowHiddenFiles()}/>
         </Col>
         <Resizable
-                   size={{ width: this.state.editorWidth, height: this.state.editorHeight }}
+                   size={{ width: this.state.editorWidth, height: 'auto' }}
+                   handleClasses={{left: 'resizer-handle', right: 'resizer-handle'}}
                    onResizeStop={(e, direction, ref, _d) => {
-                     console.log(ref);
                      this.setState({
                        editorWidth: ref.style.width,
                        height: ref.style.height
@@ -84,13 +83,15 @@ class EditorContainer extends React.Component {
                      this.editor.handleResize();
                    }}
                    className="text-editor-container"
-                   enable={{ top:false, right:true, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
+                   enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
           <TextEditorContainer ref={instance => {
             if (instance) this.editor = instance.getWrappedInstance().editor;
           }} currentFile={this.props.currentFile} onFileContentChange={(newContent) => this.onFileContentChange(newContent)} />
         </Resizable>
         {this.state.currentAsideTab &&
-        <Resizable defaultSize={{width: '25%', height: '100%'}} className="border-left-0 relative">
+        <Resizable defaultSize={{width: '25%', height: 'auto'}}
+                   handleClasses={{left: 'resizer-handle', right: 'resizer-handle'}} className="border-left-0 relative"
+                   enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}>
           <div className="editor-aside">
             <TextEditorAsideContainer currentAsideTab={this.state.currentAsideTab}
                                       currentFile={this.props.currentFile}/>

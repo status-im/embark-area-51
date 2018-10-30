@@ -39,3 +39,7 @@
     max-height: 500px;
   }
 }
+
+.resizer-handle {
+  width: 15px !important;
+}
